@@ -30,6 +30,8 @@ class CHAD:
         self.yPixFracStart = 0.3
         self.yPixFracLen = 0.6
         self.yPixFracEnd = self.yPixFracStart+self.yPixFracLen
+        self.cbLen = 0.10
+        self.cbPad = 0.02
 
         self.yPixFracStart_1DX = 0.05
         self.yPixFracEnd_1DX = self.yPixFracStart-0.1
@@ -38,18 +40,19 @@ class CHAD:
         self.xPixFracEnd_1DY = self.xPixFracStart-0.1
         self.xPixFracLen_1DY =self.xPixFracEnd_1DY-self.xPixFracStart_1DY
 
+
         self.figure = plt.figure(figsize=((self.figXPixelsReq*1.0)/self.figDPIReq,(self.figYPixelsReq*1.0)/self.figDPIReq),
                                  dpi=self.figDPIReq)
         self.figDPI = self.figure.get_dpi()
         self.figXPixels = (self.figure.get_size_inches()*self.figDPI)[0]
         self.figYPixels = (self.figure.get_size_inches()*self.figDPI)[1]
 
-        self.axes_2D = self.figure.add_axes([self.xPixFracStart,self.yPixFracStart,
-                                             self.xPixFracLen,self.yPixFracLen])
         self.axes_1DX = self.figure.add_axes([self.xPixFracStart,self.yPixFracStart_1DX,
                                                self.xPixFracLen,self.yPixFracLen_1DX])
         self.axes_1DY = self.figure.add_axes([self.xPixFracStart_1DY,self.yPixFracStart,
                                               self.xPixFracLen_1DY,self.yPixFracLen])
+        self.axes_2D = self.figure.add_axes([self.xPixFracStart,self.yPixFracStart,
+                                             self.xPixFracLen+self.cbLen,self.yPixFracLen])
 
         self.hist = hist
         self.totalCounts = np.sum(self.hist)
@@ -90,7 +93,8 @@ class CHAD:
         self.clicks = 0
         self.lastClickTYX = [-1,-1,-1]
 
-        self.plotPositions = self.generatePlotPositions()
+        self.plotPositions,self.xDataFracFlat,self.yDataFracFlat,\
+        self.xPosFlat,self.yPosFlat,self.tPosFlat = self.generatePlotPositions()
 
         #self.showPlot()
 
@@ -100,13 +104,14 @@ class CHAD:
     def __call__(self,event):
         if(self.lastClickTYX[0] == -1):
             clear_output()
-        xClickFrac = (event.x*1.0)/self.figXPixels
-        yClickFrac = (event.y*1.0)/self.figYPixels
-        figEndAdj = 0.0133
-        if(self.xPixFracStart < xClickFrac < self.xPixFracEnd+figEndAdj):
-            if(self.yPixFracStart < yClickFrac < self.yPixFracEnd+figEndAdj):
-                xClickFracInPlot = (xClickFrac-self.xPixFracStart)/(self.xPixFracLen+figEndAdj)
-                yClickFracInPlot = (yClickFrac-self.yPixFracStart)/(self.yPixFracLen+figEndAdj)
+        xyPixMargin = 7
+        xClickFrac = ((event.x-xyPixMargin)*1.0)/self.figXPixels
+        yClickFrac = ((event.y-xyPixMargin)*1.0)/self.figYPixels
+
+        if(self.xPixFracStart < xClickFrac < self.xPixFracEnd):
+            if(self.yPixFracStart < yClickFrac < self.yPixFracEnd):
+                xClickFracInPlot = (xClickFrac-self.xPixFracStart)/(self.xPixFracLen)
+                yClickFracInPlot = (yClickFrac-self.yPixFracStart)/(self.yPixFracLen)
                 xClickBin = np.searchsorted(self.xBinEdgesFrac,xClickFracInPlot)-1
                 yClickBin = np.searchsorted(self.yBinEdgesFrac,yClickFracInPlot)-1
 
@@ -117,7 +122,7 @@ class CHAD:
 
                 xClickVal = self.xBinEdges[xClickBin]+xClickValPastBin
                 yClickVal = self.yBinEdges[yClickBin]+yClickValPastBin
-                closestDataTYX = self.findNearestPointToClick(xClickVal,yClickVal)
+                closestDataTYX = self.findNearestPointToClick(xClickFracInPlot,yClickFracInPlot)
                 if(self.lastClickTYX != closestDataTYX):
                     print('You clicked at X='+str(self.xFmtStr%xClickVal)+' Y='+str(self.yFmtStr%yClickVal))
                     print('Nearest data point is X='+str(self.xFmtStr%self.xData[closestDataTYX[0],closestDataTYX[1],
@@ -150,10 +155,13 @@ class CHAD:
                     locPointValueX = self.xData[tI,yI,xI]
                     locPointValueY = self.yData[tI,yI,xI]
 
-                    xFracPastBinMin = ((locPointValueX-self.xBinEdges[xAxisBin])/
-                                       (self.xBinEdges[xAxisBin+1]-self.xBinEdges[xAxisBin]))
-                    yFracPastBinMin = ((locPointValueY-self.yBinEdges[yAxisBin])/
-                                       (self.yBinEdges[yAxisBin+1]-self.yBinEdges[yAxisBin]))
+                    #xFracPastBinMin = ((locPointValueX-self.xBinEdges[xAxisBin])/
+                    #                   (self.xBinEdges[xAxisBin+1]-self.xBinEdges[xAxisBin]))
+                    #yFracPastBinMin = ((locPointValueY-self.yBinEdges[yAxisBin])/
+                    #                   (self.yBinEdges[yAxisBin+1]-self.yBinEdges[yAxisBin]))
+
+                    xFracPastBinMin = self.calcFracPastBinMin(locPointValueX,self.xBinEdges,xAxisBin)
+                    yFracPastBinMin = self.calcFracPastBinMin(locPointValueY,self.yBinEdges,yAxisBin)
 
                     fracPlotValueX = self.xBinEdgesFrac[xAxisBin]+(xFracPastBinMin/self.xBinNum)
                     fracPlotValueY = self.yBinEdgesFrac[yAxisBin]+(yFracPastBinMin/self.yBinNum)
@@ -179,8 +187,10 @@ class CHAD:
 
         self.axes_2D.set_title('Test',fontsize=8)
 
-        #cbar = plt.colorbar(p,ticks=self.histTicks,fraction=0.12,pad=0.02)
-        #cbar.ax.tick_params(labelsize=8)
+        cbar = plt.colorbar(p,ticks=self.histTicks,
+                            fraction=(self.cbLen/(self.xPixFracLen+self.cbLen))-self.cbPad,
+                            pad=self.cbPad)
+        cbar.ax.tick_params(labelsize=8)
 
         self.axes_1DX.bar(self.xBinEdgesFrac[:-1],self.histXLog-self.minPower,width=1./self.xBinNum)
         for ii in range(0,self.xBinNum):
@@ -206,6 +216,11 @@ class CHAD:
 
     def generatePlotPositions(self):
         plotPositions = []
+        xDataFracFlat = []
+        yDataFracFlat = []
+        xPosFlat = []
+        yPosFlat = []
+        tPosFlat = []
         for v1bin in range(0,self.xBinNum):
             plotPositions.append([])
             for v2bin in range(0,self.yBinNum):
@@ -221,8 +236,20 @@ class CHAD:
                                 np.random.shuffle(localMatches)
                             for mm in range(0,min(numOfLocalMatches,self.maxPlottedInBin)):
                                 plotPositions[v1bin][v2bin].append([localMatches[mm],yy,xx])
+                                xDataTemp = self.xData[localMatches[mm],yy,xx]
+                                yDataTemp = self.yData[localMatches[mm],yy,xx]
+                                xDataFracTemp = (1.0*v1bin/self.xBinNum)+(self.calcFracPastBinMin(xDataTemp,self.xBinEdges,
+                                                                                               v1bin)/self.xBinNum)
+                                yDataFracTemp = (1.0*v2bin/self.yBinNum)+(self.calcFracPastBinMin(yDataTemp,self.yBinEdges,
+                                                                                               v2bin)/self.yBinNum)
+                                xDataFracFlat.append(xDataFracTemp)
+                                yDataFracFlat.append(yDataFracTemp)
+                                xPosFlat.append(xx)
+                                yPosFlat.append(yy)
+                                tPosFlat.append(localMatches[mm])
 
-        return plotPositions
+        return plotPositions,np.array(xDataFracFlat),np.array(yDataFracFlat),\
+               np.array(xPosFlat),np.array(yPosFlat),np.array(tPosFlat)
 
     def runIDV(self,inputLon,inputLat,inputTime):
         #IDV has an offset from my expected Unix times
@@ -280,9 +307,18 @@ class CHAD:
 
         return
 
-    def findNearestPointToClick(self,xClickVal,yClickVal):
-        error = ((self.xData-xClickVal)**2+(self.yData-yClickVal)**2)**0.5
-        minError = np.amin(error)
-        locOfMinError = np.where(error == minError)
+    #def findNearestPointToClick(self,xClickVal,yClickVal):
+    #    error = ((self.xData-xClickVal)**2+(self.yData-yClickVal)**2)**0.5
+    #    minError = np.amin(error)
+    #    locOfMinError = np.where(error == minError)
+    #
+    #    return [locOfMinError[0][0],locOfMinError[1][0],locOfMinError[2][0]]
 
-        return [locOfMinError[0][0],locOfMinError[1][0],locOfMinError[2][0]]
+    def findNearestPointToClick(self,xClickVal,yClickVal):
+        error = ((self.xDataFracFlat-xClickVal)**2+(self.yDataFracFlat-yClickVal)**2)**0.5
+        minError = np.amin(error)
+        locOfMinError = np.where(error == minError)[0][0]
+        return [self.tPosFlat[locOfMinError],self.yPosFlat[locOfMinError],self.xPosFlat[locOfMinError]]
+
+    def calcFracPastBinMin(self,value,binEdges,bin):
+        return ((value-binEdges[bin])/(binEdges[bin+1]-binEdges[bin]))
