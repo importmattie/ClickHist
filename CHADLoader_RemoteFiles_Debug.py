@@ -39,8 +39,11 @@ urlToLoadValues = urlToLoadHist
 
 var1ValueName = 'PREC'
 var2ValueName = 'TEEF'
+var1Units = 'mm/day'
+var2Units = 'J m kg-1 s-1'
 var1ValueMult = 86400.
 var2ValueMult = 1.
+
 
 lonValueName = 'lon'
 latValueName = 'lat'
@@ -104,8 +107,8 @@ startHourInS = (timeValues[1]-timeValues[0])*(60./2.)
 startDatetime = startDate+datetime.timedelta(0,startHourInS)
 
 #--- Create CHAD using a proper call ---
-CHAD1 = CHAD.CHAD(hist,var1Edges,var2Edges,lonValues,latValues,timeValues,
-                  startDatetime,var1Values,var2Values,var1Binned,var2Binned,
+CHAD1 = CHAD.CHAD(hist,var1Edges,var2Edges,var1Binned,var2Binned,
+                  lonValues,latValues,timeValues,startDatetime,var1Values,var2Values,
                   maxPlottedInBin,figureXSize,figureYSize,figDPI,
-                  xFmtStr,yFmtStr)
+                  var1ValueName,var2ValueName,var1Units,var2Units,xFmtStr,yFmtStr)
 CHAD1.showPlot()
