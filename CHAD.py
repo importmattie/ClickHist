@@ -372,8 +372,9 @@ class CHAD:
         basisBundleFile = './Bundles/'+'CHAD_testBundle.xidv'
         tempBundleFile = './Bundles/TempBundles/tempBundle_'+currentUnixTime+'.xidv'
         #This needs to be fixed eventually
+        timeTag = self.convertToYMDT(inputTime)
         finalBundleFile = './Bundles/'+self.xVarName+'_'+self.yVarName+'_999_999_'+\
-                          str(inputLon)+'_'+str(inputLat)+'_'+str(inputTime)+'.xidv'
+                          str("%03i"%inputLon)+'_'+str("%02i"%inputLat)+'_'+timeTag+'.xidv'
 
         centerLonFiller = '-154.123456789'
         lonLenFiller = '10.123456789'
@@ -422,3 +423,9 @@ class CHAD:
 
     def calcFracPastBinMin(self,value,binEdges,bin):
         return ((value-binEdges[bin])/(binEdges[bin+1]-binEdges[bin]))
+
+    def convertToYMDT(self,unixTime):
+        #Check for timezones in next version
+        ymdt = datetime.datetime.fromtimestamp(unixTime)
+        return str(ymdt.year)+"%02i"%ymdt.month+"%02i"%ymdt.day+'_'+\
+               "%02i"%ymdt.hour+"%02i"%ymdt.minute
