@@ -1,10 +1,14 @@
-# CHAD
+# ClickHist
+
+Clickable Histogram (ClickHist)
+ClickHist + Atmospheric Dataset =
 Clickable Histogram of Atmospheric Data (CHAD)
+
 Author: Matthew Niznik (matthewniznik on Github)
 E-mail: matthew.niznik9@gmail.com
-Version 0.04
-Date: 2015-08-28
-(Note: CHAD is currently experimental)
+Version 0.1
+Date: 2015-09-19
+(Note: ClickHist/CHAD is currently experimental)
 
 System Requirements:
 
@@ -13,6 +17,6 @@ Python 2.7 (anaconda works well and contains most of the packages needed)
 
 Instructions:
 
-Visit https://sites.google.com/site/matthewjniznik/research/chad_instructions
+Visit https://sites.google.com/site/matthewjniznik/research/clickhist
 
-If you come across any bugs or need assistance in using CHAD, please notify me at the E-mail listed above.
+If you come across any bugs or need assistance in using ClickHist/CHAD, please notify me at the E-mail listed above.
