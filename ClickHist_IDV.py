@@ -2,6 +2,7 @@ __author__ = 'niznik'
 
 import ClickHistDo_Empty as ClickHistDo
 from IPython.display import clear_output
+import matplotlib
 from matplotlib import pylab
 from matplotlib import pyplot as plt
 import numpy as np
@@ -12,6 +13,7 @@ class ClickHist:
 
         #Initialize ClickHist
         self.os = sys.platform
+        matplotlib.rcParams['toolbar'] = 'None'
 
         #Set plot density and size parameters
         self.maxPlottedInBin = 1000
@@ -123,6 +125,7 @@ class ClickHist:
         self.lastClickLoc = -1
         self.lastClickDot = []
         self.lastClickLine = []
+        self.thinking = 0
 
         #Call generatePlotPositions() to ???
         self.plotPositions,self.plotPositionsFlat,\
@@ -137,24 +140,26 @@ class ClickHist:
     #__call__() function
     #Describes what to do when the user clicks on the plot
     def __call__(self,event):
-        self.clicks += 1
-        clear_output()
-        print 'Thinking...'
+        if(self.thinking == 0):
+            self.thinking = 1
+            self.clicks += 1
+            clear_output()
+            print 'Thinking...'
 
-        xClickFrac = ((event.x)*1.0)/self.figXPixels
-        yClickFrac = ((event.y)*1.0)/self.figYPixels
+            xClickFrac = ((event.x)*1.0)/self.figXPixels
+            yClickFrac = ((event.y)*1.0)/self.figYPixels
 
-        if(self.xPixFracStart < xClickFrac < self.xPixFracEnd):
-            if(self.yPixFracStart < yClickFrac < self.yPixFracEnd):
+            if((self.xPixFracStart < xClickFrac < self.xPixFracEnd) and
+                   (self.yPixFracStart < yClickFrac < self.yPixFracEnd)):
                 xClickFracInPlot = (xClickFrac-self.xPixFracStart)/(self.xPixFracLen)
                 yClickFracInPlot = (yClickFrac-self.yPixFracStart)/(self.yPixFracLen)
                 xClickBin = np.searchsorted(self.xBinEdgesFrac,xClickFracInPlot)-1
                 yClickBin = np.searchsorted(self.yBinEdgesFrac,yClickFracInPlot)-1
 
                 xClickValPastBin = (xClickFracInPlot-self.xBinEdgesFrac[xClickBin])*self.xBinNum*\
-                                   (self.xBinEdges[xClickBin+1]-self.xBinEdges[xClickBin])
+                                       (self.xBinEdges[xClickBin+1]-self.xBinEdges[xClickBin])
                 yClickValPastBin = (yClickFracInPlot-self.yBinEdgesFrac[yClickBin])*self.yBinNum*\
-                                   (self.yBinEdges[yClickBin+1]-self.yBinEdges[yClickBin])
+                                       (self.yBinEdges[yClickBin+1]-self.yBinEdges[yClickBin])
 
                 xClickVal = self.xBinEdges[xClickBin]+xClickValPastBin
                 yClickVal = self.yBinEdges[yClickBin]+yClickValPastBin
@@ -171,17 +176,17 @@ class ClickHist:
                 closestDataXFrac = self.xDataFracFlat[locOfMinError]
                 closestDataYFrac = self.yDataFracFlat[locOfMinError]
                 self.lastClickLine = self.axes_2D.plot([xClickFracInPlot,closestDataXFrac],
-                                                       [yClickFracInPlot,closestDataYFrac],'-',color='#ff4080')
+                                                           [yClickFracInPlot,closestDataYFrac],'-',color='#ff4080')
                 plt.draw()
 
                 if(self.lastClickLoc != locOfMinError):
                     #clear_output()
                     print('You clicked at X='+str(self.xFmtStr%xClickVal)+' Y='+str(self.yFmtStr%yClickVal))
                     print('Nearest data point is X='+
-                          str(self.xFmtStr%self.convertFracToValue(self.xDataFracFlat[locOfMinError],
-                                                                   self.xBinEdges,self.xBinEdgesFrac))+' Y='+
-                          str(self.yFmtStr%self.convertFracToValue(self.yDataFracFlat[locOfMinError],
-                                                                   self.yBinEdges,self.yBinEdgesFrac)))
+                            str(self.xFmtStr%self.convertFracToValue(self.xDataFracFlat[locOfMinError],
+                                                                     self.xBinEdges,self.xBinEdgesFrac))+' Y='+
+                            str(self.yFmtStr%self.convertFracToValue(self.yDataFracFlat[locOfMinError],
+                                                                     self.yBinEdges,self.yBinEdgesFrac)))
                     print('(Click again to '+self.doObject.doObjectHint+')')
                     self.lastClickLoc = locOfMinError
                 else:
@@ -191,7 +196,8 @@ class ClickHist:
                     self.doObject.do(self.plotPositionsFlat[locOfMinError])
                     #This should probably not be touched - it checks for whether or not to reset the closest point
                     self.lastClickLoc = locOfMinError
-            elif(self.yPixFracStart_1DX < yClickFrac < self.yPixFracEnd_1DX):
+            elif((self.xPixFracStart < xClickFrac < self.xPixFracEnd) and
+                     (self.yPixFracStart_1DX < yClickFrac < self.yPixFracEnd_1DX)):
                 #currentBin ranges from 1 through self.xBinNum, so edges are currentBin-1 and currentBin
                 currentBin = int(((xClickFrac-self.xPixFracStart)/self.xPixFracLen)*self.xBinNum)
                 currentBinEdgeLow = self.xBinEdges[currentBin]
@@ -203,8 +209,8 @@ class ClickHist:
                 print 'Bin '+str(currentBin+1)+':'
                 print self.xFmtStr%currentBinEdgeLow+' - '+self.xFmtStr%currentBinEdgeHigh+' '+self.xUnits
                 print str(int(currentBinMem))+' counts ('+currentBinPercent+'% of all counts)'
-        elif(self.xPixFracStart_1DY < xClickFrac < self.xPixFracEnd_1DY):
-            if(self.yPixFracStart < yClickFrac < self.yPixFracEnd):
+            elif((self.xPixFracStart_1DY < xClickFrac < self.xPixFracEnd_1DY) and
+                     (self.yPixFracStart < yClickFrac < self.yPixFracEnd)):
                 currentBin = int(((yClickFrac-self.yPixFracStart)/self.yPixFracLen)*self.yBinNum)
                 currentBinEdgeLow = self.yBinEdges[currentBin]
                 currentBinEdgeHigh = self.yBinEdges[currentBin+1]
@@ -215,9 +221,10 @@ class ClickHist:
                 print 'Bin '+str(currentBin+1)+':'
                 print self.yFmtStr%currentBinEdgeLow+' - '+self.yFmtStr%currentBinEdgeHigh+' '+self.yUnits
                 print str(int(currentBinMem))+' counts ('+currentBinPercent+'% of all counts)'
-        else:
-            clear_output()
-            print '(Non-clickable area...)'
+            else:
+                clear_output()
+                print '(Non-clickable area...)'
+            self.thinking = 0
 
     def showPlot(self):
         p = self.axes_2D.pcolor(self.xBinEdgesFrac,self.yBinEdgesFrac,self.histLog,
@@ -228,11 +235,11 @@ class ClickHist:
 
         self.axes_2D.set_xlim(self.xBinEdgesFrac[0],self.xBinEdgesFrac[-1])
         self.axes_2D.set_xticks(self.xBinEdgesFrac)
-        self.axes_2D.set_xticklabels(self.xBinEdges[0:self.xBinNum],rotation=270)
+        self.axes_2D.set_xticklabels(self.xBinEdges[0:self.xBinNum+1],rotation=270)
         self.axes_2D.tick_params(axis='x',labelsize=6)
         self.axes_2D.set_ylim(self.yBinEdgesFrac[0],self.yBinEdgesFrac[-1])
         self.axes_2D.set_yticks(self.yBinEdgesFrac)
-        self.axes_2D.set_yticklabels(self.yBinEdges[0:self.yBinNum],rotation=360)
+        self.axes_2D.set_yticklabels(self.yBinEdges[0:self.yBinNum+1],rotation=360)
         self.axes_2D.tick_params(axis='y',labelsize=6)
 
         for yy in range(0,self.yBinNum):
@@ -257,6 +264,8 @@ class ClickHist:
             barColorsX = pylab.cm.Spectral_r(cbPercent)
             self.axes_1DX.bar(self.xBinEdgesFrac[ii],self.histXLog[ii]-self.minPower,
                               width=1./self.xBinNum,color=barColorsX)
+            if(ii != 0):
+                self.axes_1DX.axvline(x=self.xBinEdgesFrac[ii],ls='--',lw=1,color='#444444')
         self.axes_1DX.xaxis.set_visible(False)
         self.axes_1DX.yaxis.set_visible(False)
 
@@ -266,6 +275,8 @@ class ClickHist:
             barColorsY = pylab.cm.Spectral_r(cbPercent)
             self.axes_1DY.barh(self.yBinEdgesFrac[ii],self.histYLog[ii]-self.minPower,
                                height=1./self.yBinNum,color=barColorsY)
+            if(ii != 0):
+                self.axes_1DY.axhline(y=self.yBinEdgesFrac[ii],ls='--',lw=1,color='#444444')
         self.axes_1DY.xaxis.set_visible(False)
         self.axes_1DY.yaxis.set_visible(False)
 

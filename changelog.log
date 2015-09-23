@@ -1,0 +1,7 @@
+version 0.11: 9/23/2015
+- fixed bug where ClickHist didn't determine non-clickable areas properly
+- fixed bug where TempBundles folder was not created if it didn't exist
+- fixed bug where maximum bin was unlabeled on plot
+- added check for if a previous click's calculation has not completed so that new clicks are temporarily ignored
+- added separators for 1D histograms
+- removed matplotlib toolbar menu

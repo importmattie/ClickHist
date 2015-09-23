@@ -1,6 +1,7 @@
 __author__ = 'niznik'
 
 import datetime
+import os
 import sys
 from subprocess import call
 import time
@@ -46,6 +47,8 @@ class ClickHistDo:
         currentUnixTime = str(int(time.time()))
         basisBundleFile = './Bundles/'+'ClickHist_testBundle.xidv'
         #Write a line in here to make a more normal, hidden temp directory?
+        if(os.path.exists('./Bundles/TempBundles/') == False):
+            call('mkdir ./Bundles/TempBundles/',shell=True)
         tempBundleFile = './Bundles/TempBundles/tempBundle_'+currentUnixTime+'.xidv'
 
         inputLonIndex,inputLatIndex,inputTimeIndex = self.find3DIndices(flatIndex)
@@ -110,6 +113,11 @@ class ClickHistDo:
         call('rm '+tempBundleFile+'.bckp',shell=True)
 
         print 'Saved!'
+
+        #----- Creating IDV Thumbnail/movie as well -----
+        #Process the sed
+        #call the script
+        #clean up files
 
     def convertToYMDT(self,unixTime):
         #Check for timezones in next version
