@@ -4,10 +4,16 @@ import datetime
 import os
 import sys
 from subprocess import call
+from subprocess import Popen
 import time
 
 class ClickHistDo:
     def __init__(self,lons,lats,times,**kwargs):
+
+        #Toggle the running of IDV on the new bundle to create a movie and image
+        #Yes is 1
+        #No is anything else
+        self.createMovImg = 0
 
         self.os = sys.platform
 
@@ -73,8 +79,9 @@ class ClickHistDo:
 
         #This needs to be fixed eventually
         timeTag = self.convertToYMDT(inputTime)
-        finalBundleFile = './Bundles/'+self.xVarName+'_'+self.yVarName+'_999_999_'+\
-                          str("%03i"%inputLon)+'_'+str("%02i"%inputLat)+'_'+timeTag+'.xidv'
+        commonFilename = self.xVarName+'_'+self.yVarName+'_999_999_'+\
+                          str("%03i"%inputLon)+'_'+str("%02i"%inputLat)+'_'+timeTag
+        finalBundleFile = './Bundles/'+commonFilename+'.xidv'
 
         centerLonFiller = '-154.123456789'
         lonLenFiller = '10.123456789'
@@ -114,10 +121,25 @@ class ClickHistDo:
 
         print 'Saved!'
 
-        #----- Creating IDV Thumbnail/movie as well -----
-        #Process the sed
-        #call the script
-        #clean up files
+        if(self.createMovImg == 1):
+            #----- Creating IDV Thumbnail/movie as well -----
+            if(os.path.exists('./Bundles/Images/') == False):
+                call('mkdir ./Bundles/Images/',shell=True)
+
+            basisISL = './Bundles/idvMovieOutput_fillIn.isl'
+            tempISL = './Bundles/Images/idvMovieOutput_'+currentUnixTime+'.isl'
+            #Process the sed
+            call('sed \'s/BUNDLENAME/'+commonFilename+'/\' '+basisISL+' > '+tempISL,shell=True)
+            call('sed '+backupTag+' \'s/MOVIENAME/'+commonFilename+'/\' '+tempISL,shell=True)
+            call('sed '+backupTag+' \'s/IMAGENAME/'+commonFilename+'/\' '+tempISL,shell=True)
+            #Open IDV in a new thread so that we don't have to wait for it to finish
+            Popen('runIDV '+tempISL+'; rm '+tempISL,shell=True,stdin=None,stdout=None,stderr=None,
+                  close_fds=True)
+            print 'IDV running in background...'
+            #clean up files
+            call('rm '+tempISL+'.bckp',shell=True)
+            #call('rm '+finalMovieFile)
+            #call('rm '+finalImageFile)
 
     def convertToYMDT(self,unixTime):
         #Check for timezones in next version

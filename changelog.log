@@ -1,3 +1,6 @@
+version 0.12: 9/24/2015
+- added functionality where CHAD spawns an IDV session to create a movie and image from the created bundle instead of simply writing the bundle (this feature can be turned on or off in the ClickHistDo_IDV.py file near the top)
+
 version 0.11: 9/23/2015
 - fixed bug where ClickHist didn't determine non-clickable areas properly
 - fixed bug where TempBundles folder was not created if it didn't exist
