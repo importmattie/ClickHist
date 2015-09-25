@@ -38,8 +38,8 @@ class ClickHist:
         self.yVarName = 'yVar'
         self.xUnits = 'units'
         self.yUnits = 'units'
-        self.xFmtStr = "%.1f"
-        self.yFmtStr = "%.1f"
+        self.xFmtStr = "{:.1f}"
+        self.yFmtStr = "{:.1f}"
 
         #Formatting of the axes kwargs
         #(xVarName,yVarName,xUnits,yUnits,xFmtStr,yFmtStr)
@@ -181,12 +181,13 @@ class ClickHist:
 
                 if(self.lastClickLoc != locOfMinError):
                     #clear_output()
-                    print('You clicked at X='+str(self.xFmtStr%xClickVal)+' Y='+str(self.yFmtStr%yClickVal))
+                    print('You clicked at X='+str(self.xFmtStr.format(xClickVal))+
+                          ' Y='+str(self.yFmtStr.format(yClickVal)))
                     print('Nearest data point is X='+
-                            str(self.xFmtStr%self.convertFracToValue(self.xDataFracFlat[locOfMinError],
-                                                                     self.xBinEdges,self.xBinEdgesFrac))+' Y='+
-                            str(self.yFmtStr%self.convertFracToValue(self.yDataFracFlat[locOfMinError],
-                                                                     self.yBinEdges,self.yBinEdgesFrac)))
+                            str(self.xFmtStr.format(self.convertFracToValue(self.xDataFracFlat[locOfMinError],
+                                                                     self.xBinEdges,self.xBinEdgesFrac)))+' Y='+
+                            str(self.yFmtStr.format(self.convertFracToValue(self.yDataFracFlat[locOfMinError],
+                                                                     self.yBinEdges,self.yBinEdgesFrac))))
                     print('(Click again to '+self.doObject.doObjectHint+')')
                     self.lastClickLoc = locOfMinError
                 else:
@@ -202,24 +203,26 @@ class ClickHist:
                 currentBin = int(((xClickFrac-self.xPixFracStart)/self.xPixFracLen)*self.xBinNum)
                 currentBinEdgeLow = self.xBinEdges[currentBin]
                 currentBinEdgeHigh = self.xBinEdges[currentBin+1]
-                currentBinPercent = "%.4f"%((10.**(self.histXLog[currentBin]))*100.)
+                currentBinPercent = "{:.4f}".format((10.**(self.histXLog[currentBin]))*100.)
                 currentBinMem = self.histX[currentBin]
                 clear_output()
                 print 'X-Histogram Value:'
                 print 'Bin '+str(currentBin+1)+':'
-                print self.xFmtStr%currentBinEdgeLow+' - '+self.xFmtStr%currentBinEdgeHigh+' '+self.xUnits
+                print self.xFmtStr.format(currentBinEdgeLow)+' - '+self.xFmtStr.format(currentBinEdgeHigh)+\
+                      ' '+self.xUnits
                 print str(int(currentBinMem))+' counts ('+currentBinPercent+'% of all counts)'
             elif((self.xPixFracStart_1DY < xClickFrac < self.xPixFracEnd_1DY) and
                      (self.yPixFracStart < yClickFrac < self.yPixFracEnd)):
                 currentBin = int(((yClickFrac-self.yPixFracStart)/self.yPixFracLen)*self.yBinNum)
                 currentBinEdgeLow = self.yBinEdges[currentBin]
                 currentBinEdgeHigh = self.yBinEdges[currentBin+1]
-                currentBinPercent = "%.4f"%((10.**(self.histYLog[currentBin]))*100.)
+                currentBinPercent = "{:.4f}".format(((10.**(self.histYLog[currentBin]))*100.))
                 currentBinMem = self.histY[currentBin]
                 clear_output()
                 print 'Y-Histogram Value:'
                 print 'Bin '+str(currentBin+1)+':'
-                print self.yFmtStr%currentBinEdgeLow+' - '+self.yFmtStr%currentBinEdgeHigh+' '+self.yUnits
+                print self.yFmtStr.format(currentBinEdgeLow)+' - '+self.yFmtStr.format(currentBinEdgeHigh)+\
+                      ' '+self.yUnits
                 print str(int(currentBinMem))+' counts ('+currentBinPercent+'% of all counts)'
             else:
                 clear_output()

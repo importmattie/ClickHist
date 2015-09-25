@@ -10,11 +10,6 @@ import time
 class ClickHistDo:
     def __init__(self,lons,lats,times,**kwargs):
 
-        #Toggle the running of IDV on the new bundle to create a movie and image
-        #Yes is 1
-        #No is anything else
-        self.createMovImg = 0
-
         self.os = sys.platform
 
         self.lons = lons
@@ -121,34 +116,34 @@ class ClickHistDo:
 
         print 'Saved!'
 
-        if(self.createMovImg == 1):
-            #----- Creating IDV Thumbnail/movie as well -----
-            if(os.path.exists('./Bundles/Images/') == False):
-                call('mkdir ./Bundles/Images/',shell=True)
+        if(os.path.exists('./Bundles/Images/') == False):
+            call('mkdir ./Bundles/Images/',shell=True)
 
-            basisISL = './Bundles/idvMovieOutput_fillIn.isl'
-            tempISL = './Bundles/Images/idvMovieOutput_'+currentUnixTime+'.isl'
-            #Process the sed
-            call('sed \'s/BUNDLENAME/'+commonFilename+'/\' '+basisISL+' > '+tempISL,shell=True)
-            call('sed '+backupTag+' \'s/MOVIENAME/'+commonFilename+'/\' '+tempISL,shell=True)
-            call('sed '+backupTag+' \'s/IMAGENAME/'+commonFilename+'/\' '+tempISL,shell=True)
-            #Open IDV in a new thread so that we don't have to wait for it to finish
-            Popen('runIDV '+tempISL+'; rm '+tempISL,shell=True,stdin=None,stdout=None,stderr=None,
-                  close_fds=True)
-            print 'IDV running in background...'
-            #clean up files
-            call('rm '+tempISL+'.bckp',shell=True)
-            #call('rm '+finalMovieFile)
-            #call('rm '+finalImageFile)
+        basisISL = './Bundles/idvMovieOutput_fillIn.isl'
+        tempISL = './Bundles/Images/idvMovieOutput_'+currentUnixTime+'.isl'
+        #Process via sed
+        call('sed \'s/BUNDLENAME/'+commonFilename+'/\' '+basisISL+' > '+tempISL,shell=True)
+        call('sed '+backupTag+' \'s/MOVIENAME/'+commonFilename+'/\' '+tempISL,shell=True)
+        call('sed '+backupTag+' \'s/IMAGENAME/'+commonFilename+'/\' '+tempISL,shell=True)
+        #clean up backup files
+        call('rm '+tempISL+'.bckp',shell=True)
 
     def convertToYMDT(self,unixTime):
         #Check for timezones in next version
         ymdt = datetime.datetime.fromtimestamp(unixTime)
-        return str(ymdt.year)+"%02i"%ymdt.month+"%02i"%ymdt.day+'_'+\
-               "%02i"%ymdt.hour+"%02i"%ymdt.minute
+        return str(ymdt.year)+"{:02.0f}".format(ymdt.month)+"{:02.0f}".format(ymdt.day)+'_'+\
+               "{:02.0f}".format(ymdt.hour)+"{:02.0f}".format(ymdt.minute)
 
     def find3DIndices(self,flatIndex):
         lon = flatIndex%self.lonLen
         lat = (flatIndex/self.lonLen)%self.latLen
         time = flatIndex/(self.lonLen*self.latLen)
         return lon,lat,time
+
+    def setNameAtHost(self,nameAtHost):
+        self.nameAtHost = nameAtHost
+        return
+
+    def setPathAtHost(self,pathAtHost):
+        self.pathAtHost = pathAtHost
+        return

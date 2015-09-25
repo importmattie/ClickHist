@@ -1,3 +1,7 @@
+version 0.13: 9/25/2015
+- removed some of added functionality of V0.12: isl script is made, but not run - left for user to automate at his leisure
+- updated all string formats to match newer standard
+
 version 0.12: 9/24/2015
 - added functionality where CHAD spawns an IDV session to create a movie and image from the created bundle instead of simply writing the bundle (this feature can be turned on or off in the ClickHistDo_IDV.py file near the top)
 
