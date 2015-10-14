@@ -1,3 +1,10 @@
+version 0.14: 10/14/2015
+- Added “Metadata” argument - currently used in CHAD as movie/image label when .isl script is run
+- CHAD Percentiles are now correct in output files
+- ClickHist also has percentiles calculated for option in a Do Script
+- Fixed a bug where different numbers of bins for x and y would cause ClickHist to crash
+- Fixed a bug where the input variable name was used for plot labeling instead of the cleaner name
+
 version 0.13: 9/25/2015
 - removed some of added functionality of V0.12: isl script is made, but not run - left for user to automate at his leisure
 - updated all string formats to match newer standard

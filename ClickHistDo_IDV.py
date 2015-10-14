@@ -22,6 +22,9 @@ class ClickHistDo:
 
         self.xVarName = 'xVar'
         self.yVarName = 'yVar'
+        self.metadata = ''
+        self.xPer = 99.9
+        self.yPer = 99.9
 
         self.startDatetime = datetime.datetime(2005,05,16)
         #This is due to a as-of-yet poorly understood difference between Unix time and IDV time
@@ -41,7 +44,15 @@ class ClickHistDo:
         if(kwargs.has_key('yVarName')):
             self.yVarName = kwargs.get('yVarName')
 
-    def do(self,flatIndex):
+    def do(self,flatIndex,**kwargs):
+
+        #Check if the metadata tag was included
+        if(kwargs.has_key('metadata')):
+            self.metadata = kwargs.get('metadata')
+        if(kwargs.has_key('xPer')):
+            self.xPer = kwargs.get('xPer')
+        if(kwargs.has_key('yPer')):
+            self.yPer = kwargs.get('yPer')
 
         print 'Saving IDV bundle...'
 
@@ -74,7 +85,9 @@ class ClickHistDo:
 
         #This needs to be fixed eventually
         timeTag = self.convertToYMDT(inputTime)
-        commonFilename = self.xVarName+'_'+self.yVarName+'_999_999_'+\
+        commonFilename = self.xVarName+'_'+self.yVarName+'_'+\
+                         "{:003.0f}".format(min(10*self.xPer,999))+'_'+\
+                         "{:003.0f}".format(min(10*self.yPer,999))+'_'+\
                           str("%03i"%inputLon)+'_'+str("%02i"%inputLat)+'_'+timeTag
         finalBundleFile = './Bundles/'+commonFilename+'.xidv'
 
@@ -125,6 +138,7 @@ class ClickHistDo:
         call('sed \'s/BUNDLENAME/'+commonFilename+'/\' '+basisISL+' > '+tempISL,shell=True)
         call('sed '+backupTag+' \'s/MOVIENAME/'+commonFilename+'/\' '+tempISL,shell=True)
         call('sed '+backupTag+' \'s/IMAGENAME/'+commonFilename+'/\' '+tempISL,shell=True)
+        call('sed '+backupTag+' \'s/METADATA/'+self.metadata+'/\' '+tempISL,shell=True)
         #clean up backup files
         call('rm '+tempISL+'.bckp',shell=True)
 

@@ -6,6 +6,7 @@ import matplotlib
 from matplotlib import pylab
 from matplotlib import pyplot as plt
 import numpy as np
+from scipy import stats
 import sys
 
 class ClickHist:
@@ -121,6 +122,7 @@ class ClickHist:
 
         #Set up interactivity
         self.cid = self.figure.canvas.mpl_connect('button_press_event',self)
+        #self.rid = self.figure.canvas.mpl_connect('resize_event',self)
         self.clicks = 0
         self.lastClickLoc = -1
         self.lastClickDot = []
@@ -132,6 +134,10 @@ class ClickHist:
         self.xDataFracFlat,self.yDataFracFlat,self.pointColors = self.generatePlotPositions()
 
         self.doObject = ClickHistDo.ClickHistDo()
+
+        self.metadata = ''
+        if(kwargs.has_key('metadata')):
+            self.metadata = kwargs.get('metadata')
 
         #Inform the user that the plot was successfully initialized
         print 'ClickHist Initialized!'
@@ -179,22 +185,27 @@ class ClickHist:
                                                            [yClickFracInPlot,closestDataYFrac],'-',color='#ff4080')
                 plt.draw()
 
+                closestDataX = self.convertFracToValue(self.xDataFracFlat[locOfMinError],
+                                                       self.xBinEdges,self.xBinEdgesFrac)
+                closestDataY = self.convertFracToValue(self.yDataFracFlat[locOfMinError],
+                                                       self.yBinEdges,self.yBinEdgesFrac)
+
                 if(self.lastClickLoc != locOfMinError):
                     #clear_output()
                     print('You clicked at X='+str(self.xFmtStr.format(xClickVal))+
                           ' Y='+str(self.yFmtStr.format(yClickVal)))
                     print('Nearest data point is X='+
-                            str(self.xFmtStr.format(self.convertFracToValue(self.xDataFracFlat[locOfMinError],
-                                                                     self.xBinEdges,self.xBinEdgesFrac)))+' Y='+
-                            str(self.yFmtStr.format(self.convertFracToValue(self.yDataFracFlat[locOfMinError],
-                                                                     self.yBinEdges,self.yBinEdgesFrac))))
+                            str(self.xFmtStr.format(closestDataX))+' Y='+str(self.yFmtStr.format(closestDataY)))
                     print('(Click again to '+self.doObject.doObjectHint+')')
                     self.lastClickLoc = locOfMinError
                 else:
                     #This can be edited to do just about anything!
                     clear_output()
+                    xPercentile = self.findPercentile(self.xData,closestDataX)
+                    yPercentile = self.findPercentile(self.yData,closestDataY)
                     self.doObject.do()
-                    #self.doObject.do(self.plotPositionsFlat[locOfMinError])
+                    #self.doObject.do(self.plotPositionsFlat[locOfMinError],metadata=self.metadata,
+                    #                 xPer=xPercentile,yPer=yPercentile)
                     #This should probably not be touched - it checks for whether or not to reset the closest point
                     self.lastClickLoc = locOfMinError
             elif((self.xPixFracStart < xClickFrac < self.xPixFracEnd) and
@@ -230,7 +241,7 @@ class ClickHist:
             self.thinking = 0
 
     def showPlot(self):
-        p = self.axes_2D.pcolor(self.xBinEdgesFrac,self.yBinEdgesFrac,self.histLog,
+        p = self.axes_2D.pcolor(self.xBinEdgesFrac,self.yBinEdgesFrac,np.transpose(self.histLog),
                                 vmin=self.minPower,vmax=self.maxPower,cmap='Spectral_r')
         self.axes_2D.cla()
 
@@ -342,6 +353,9 @@ class ClickHist:
         bin = np.searchsorted(binEdgesFrac,frac)-1
         valPastBin = ((frac-binEdgesFrac[bin])/(binEdgesFrac[bin+1]-binEdgesFrac[bin]))*(binEdges[bin+1]-binEdges[bin])
         return binEdges[bin]+valPastBin
+
+    def findPercentile(self,dataArray,point):
+        return stats.percentileofscore(dataArray,point)
 
     def setDo(self,doObject):
         self.doObject = doObject
