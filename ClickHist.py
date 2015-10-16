@@ -109,15 +109,15 @@ class ClickHist:
         self.maxPower = 0
         self.minPower = int(np.log10(1./self.totalCounts))-1
         self.histTicks = np.arange(self.minPower,self.maxPower+1,1)
-        self.histLog = np.log10((1.0*self.hist)/np.sum(self.hist))
+        self.histLog = np.log10((1.0*np.where(self.hist > 0,self.hist,0.1))/np.sum(self.hist))
         self.histLog = np.where(self.histLog < self.minPower,self.minPower,self.histLog)
 
         #Set similar parameters for the 1D histograms
         self.histX = np.sum(self.hist,1)
         self.histY = np.sum(self.hist,0)
-        self.histXLog = np.log10((1.0*self.histX)/np.sum(self.histX))
+        self.histXLog = np.log10((1.0*np.where(self.histX > 0,self.histX,0.1))/np.sum(self.histX))
         self.histXLog = np.where(self.histXLog < self.minPower,self.minPower,self.histXLog)
-        self.histYLog = np.log10((1.0*self.histY)/np.sum(self.histY))
+        self.histYLog = np.log10((1.0*np.where(self.histY > 0,self.histY,0.1))/np.sum(self.histY))
         self.histYLog = np.where(self.histYLog < self.minPower,self.minPower,self.histYLog)
 
         #Set up interactivity
@@ -293,6 +293,12 @@ class ClickHist:
                 self.axes_1DY.axhline(y=self.yBinEdgesFrac[ii],ls='--',lw=1,color='#444444')
         self.axes_1DY.xaxis.set_visible(False)
         self.axes_1DY.yaxis.set_visible(False)
+
+        self.figure.text(0.01,0.07,'ClickHist Version 0.15 (Experimental)',fontsize=4)
+        self.figure.text(0.01,0.055,'Known bugs:',fontsize=4)
+        self.figure.text(0.01,0.04,'Resizing window will break ClickHist',fontsize=4)
+        self.figure.text(0.01,0.025,'"Thinking" message without any results',fontsize=4)
+        self.figure.text(0.01,0.01,'To fix: Restart ClickHist',fontsize=4)
 
         plt.show()
 

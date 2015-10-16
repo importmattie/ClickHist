@@ -1,3 +1,9 @@
+version 0.15: 10/16/2015
+- Eliminated log10 warnings from calculations
+- Added stamp with version and known bugs
+- Added .zidv functionality to the .isl script in CHAD for saving subset of data for offline use (most recent nightly build of IDV needed for this to work)
+- Removed some old files
+
 version 0.14: 10/14/2015
 - Added “Metadata” argument - currently used in CHAD as movie/image label when .isl script is run
 - CHAD Percentiles are now correct in output files
