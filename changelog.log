@@ -1,3 +1,10 @@
+version 0.16: 10/17/2015
+- added new GEOS5 notebook for CHAD
+- made CHAD output more verbose when saving a file for user to verify result
+- changed the default .xidv bundle for CHAD
+- pointed CHAD GEOS5 notebook to new data location
+- fixed a bug with CHAD dealing with .xidv bundle time
+
 version 0.15: 10/16/2015
 - Eliminated log10 warnings from calculations
 - Added stamp with version and known bugs

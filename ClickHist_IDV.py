@@ -204,7 +204,9 @@ class ClickHist:
                     yPercentile = self.findPercentile(self.yData,closestDataY)
                     #self.doObject.do()
                     self.doObject.do(self.plotPositionsFlat[locOfMinError],metadata=self.metadata,
-                                     xPer=xPercentile,yPer=yPercentile)
+                                     xPer=xPercentile,yPer=yPercentile,
+                                     xyVals='X='+self.xFmtStr.format(closestDataX)+' '+self.xUnits+
+                                            ' Y='+self.yFmtStr.format(closestDataY)+' '+self.yUnits)
                     #This should probably not be touched - it checks for whether or not to reset the closest point
                     self.lastClickLoc = locOfMinError
             elif((self.xPixFracStart < xClickFrac < self.xPixFracEnd) and
@@ -293,7 +295,7 @@ class ClickHist:
         self.axes_1DY.xaxis.set_visible(False)
         self.axes_1DY.yaxis.set_visible(False)
 
-        self.figure.text(0.01,0.07,'ClickHist Version 0.15 (Experimental)',fontsize=4)
+        self.figure.text(0.01,0.07,'ClickHist Version 0.16 (Experimental)',fontsize=4)
         self.figure.text(0.01,0.055,'Known bugs:',fontsize=4)
         self.figure.text(0.01,0.04,'Resizing window will break ClickHist',fontsize=4)
         self.figure.text(0.01,0.025,'"Thinking" message without any results',fontsize=4)

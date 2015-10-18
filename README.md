@@ -6,8 +6,8 @@ Clickable Histogram of Atmospheric Data (CHAD)
 
 Author: Matthew Niznik (matthewniznik on Github)
 E-mail: matthew.niznik9@gmail.com
-Version 0.15
-Date: 2015-10-16
+Version 0.16
+Date: 2015-10-17
 (Note: ClickHist/CHAD is currently experimental)
 
 System Requirements:

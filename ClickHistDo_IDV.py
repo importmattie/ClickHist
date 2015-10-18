@@ -29,12 +29,12 @@ class ClickHistDo:
         self.startDatetime = datetime.datetime(2005,05,16)
         #This is due to a as-of-yet poorly understood difference between Unix time and IDV time
         #It also doesn't seem to be consistent
-        self.timeCorrection = 2*3600
+        self.timeCorrection = -2*3600
 
         self.lonOffset = 5.0
         self.latOffset = 5.0
         self.timeOffsetBefore = -2*3600*1000
-        self.timeOffsetAfter = 4*3600*1000-self.timeOffsetBefore
+        self.timeOffsetAfter = (-1*self.timeOffsetBefore)+2*3600*1000
 
         self.doObjectHint = 'save IDV bundle...'
 
@@ -57,7 +57,7 @@ class ClickHistDo:
         print 'Saving IDV bundle...'
 
         currentUnixTime = str(int(time.time()))
-        basisBundleFile = './Bundles/'+'ClickHist_testBundle.xidv'
+        basisBundleFile = './Bundles/'+'ClickHist_testBundle2.xidv'
         #Write a line in here to make a more normal, hidden temp directory?
         if(os.path.exists('./Bundles/TempBundles/') == False):
             call('mkdir ./Bundles/TempBundles/',shell=True)
@@ -70,6 +70,9 @@ class ClickHistDo:
                                                                            )).timetuple()))
 
         print self.startDatetime+datetime.timedelta(0,(self.times[inputTimeIndex]+30)*60)
+        print "{:3.0f}".format(inputLon)+' E '+"{:2.0f}".format(inputLat)+' N'
+        if(kwargs.has_key('xyVals')):
+            print kwargs.get('xyVals')
 
         westLon = str(inputLon-self.lonOffset)
         eastLon = str(inputLon+self.lonOffset)
@@ -103,6 +106,7 @@ class ClickHistDo:
         endTimeFiller = '1117616461000'
         startOffsetFiller = '-119.87654321'
         endOffsetFiller = '361.23456789'
+        metadataFiller = 'replaceme_METADATASTRING_replaceme'
 
         backupTag = ''
         if(self.os.startswith('darwin')):
@@ -122,6 +126,7 @@ class ClickHistDo:
         call('sed '+backupTag+' \'s/'+endTimeFiller+'/'+endTime+'/\' '+tempBundleFile,shell=True)
         call('sed '+backupTag+' \'s/'+startOffsetFiller+'/'+startOffset+'/\' '+tempBundleFile,shell=True)
         call('sed '+backupTag+' \'s/'+endOffsetFiller+'/'+endOffset+'/\' '+tempBundleFile,shell=True)
+        call('sed '+backupTag+' \'s/'+metadataFiller+'/'+self.metadata+'/\' '+tempBundleFile,shell=True)
 
         #Save the bundle with a recognizable filename
         call('mv '+tempBundleFile+' '+finalBundleFile,shell=True)
@@ -138,7 +143,7 @@ class ClickHistDo:
         call('sed \'s/BUNDLENAME/'+commonFilename+'/\' '+basisISL+' > '+tempISL,shell=True)
         call('sed '+backupTag+' \'s/MOVIENAME/'+commonFilename+'/\' '+tempISL,shell=True)
         call('sed '+backupTag+' \'s/IMAGENAME/'+commonFilename+'/\' '+tempISL,shell=True)
-        call('sed '+backupTag+' \'s/METADATA/'+self.metadata+'/\' '+tempISL,shell=True)
+        #call('sed '+backupTag+' \'s/METADATA/'+self.metadata+'/\' '+tempISL,shell=True)
         #clean up backup files
         call('rm '+tempISL+'.bckp',shell=True)
 
