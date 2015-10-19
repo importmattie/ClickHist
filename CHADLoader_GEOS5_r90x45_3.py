@@ -13,24 +13,22 @@
 # 
 # (Note: iPython Notebook needs a few tweaks to work most seemlessly with ClickHist and ClickHistDo instances - those will be pointed out below as they come up.)
 
-# In[1]:
+# In[ ]:
 
 #----- User Changeable Parameters (and appropriate libraries) -----
 
 #----- Variable Names -----
 #The appropriate other variables are set below based on this choice
-#Options: Precip, W500, wPuP, TEEF, KEDot, HMV
+#Options: Precip, W500, wPuP, TEEF, SKEDot, HMV
 var1Name = 'Precip'
-var2Name = 'KEDot'
+var2Name = 'SKEDot'
 
 #----- Regions to be loaded from the file -----#
 #----- All must be defined -----#
 #----- lon in degE (0 to 360) -----#
 #----- lat in degN (-90 to 90) -----#
-#lonLow = 360.-170.
-#lonHigh = 360.-120.
-lonLow = 50.
-lonHigh = 60.
+lonLow = 360.-170.
+lonHigh = 360.-120.
 latLow = -25.0
 latHigh = 25.0
 
@@ -59,10 +57,10 @@ timeValueName = 'time'
 
 #----- Helpful fill-in variables that are set if only the name at top is selected -----
 fmtStrOptions = {'Precip':"{:3.0f}", 'W500':"{:0.3f}", 'wPuP':"{:0.2f}",
-                 'TEEF':"{:3.0f}", 'HMV':"{:2.0f}", 'KEDot':"{:3.0f}"}
+                 'TEEF':"{:3.0f}", 'HMV':"{:2.0f}", 'SKEDot':"{:3.0f}"}
 
 valueNameOptions = {'Precip': 'PREC','W500': 'W500','wPuP': 'WPUP',
-                    'TEEF': 'TEF','HMV': 'HMV','KEDot': 'KEDOT'}
+                    'TEEF': 'TEF','HMV': 'HMV','SKEDot': 'KEDOT'}
 
 import numpy as np
 binOptions = {'Precip': np.array([0.,1.,11.,21.,31.,41.,51.,61.,71.,81.,91.,101.,250.]),
@@ -73,13 +71,13 @@ binOptions = {'Precip': np.array([0.,1.,11.,21.,31.,41.,51.,61.,71.,81.,91.,101.
               'TEEF': np.array([-20.,20.,60.,100.,140.,180.,220.,
                                  260.,300.,340.,380.,420.,1000.]),
               'HMV': np.array([0.,4.,8.,12.,16.,20.,24.,28.,32.,36.,40.,44.,100.]),
-              'KEDot': np.array([-1000.,-440.,-360.,-280.,-200.,-120.,-40.,
+              'SKEDot': np.array([-1000.,-440.,-360.,-280.,-200.,-120.,-40.,
                                   40.,120.,200.,280.,360.,1000.])}
 
 varUnitOptions = {'Precip': 'mm day-1','W500': 'm s-1','wPuP': 'm2 s-2',
-                  'TEEF': 'J m kg-1 s-1','HMV': 'm2 s-2','KEDot': 'm3 s-3'}
+                  'TEEF': 'J m kg-1 s-1','HMV': 'm2 s-2','SKEDot': 'm2 s-3'}
 
-varMultOptions = {'Precip': 86400.,'W500': 1.,'wPuP': 1.,'TEEF': 1.,'HMV': 1.,'KEDot': 1.}
+varMultOptions = {'Precip': 86400.,'W500': 1.,'wPuP': 1.,'TEEF': 1.,'HMV': 1.,'SKEDot': 1.}
 
 #----- Set Bin Edges -----
 var1Edges = binOptions[var1Name]
@@ -108,7 +106,7 @@ var1ValueMult = varMultOptions[var1Name]
 var2ValueMult = varMultOptions[var2Name]
 
 
-# In[2]:
+# In[ ]:
 
 #----- Setting the GUI -----
 #ClickHist is currently optimized for tk
@@ -140,7 +138,7 @@ import ClickHistDo_IDV as ClickHistDo
 import netCDF4
 
 
-# In[3]:
+# In[ ]:
 
 #----- Fixing the output so it isn't buffered -----
 #See: http://stackoverflow.com/questions/29772158/make-ipython-notebook-print-in-real-time
@@ -165,7 +163,7 @@ def getIntEdges(dim,low,high):
     return lowInt,highInt
 
 
-# In[4]:
+# In[ ]:
 
 #----- Manual Bin Definition -----
 #This is set above with the helpful fill-in
@@ -198,7 +196,7 @@ latValues = latValues[lowLatInt:highLatInt+1]
 cdfIn.close()
 
 
-# In[5]:
+# In[ ]:
 
 #----- Create ClickHist using a proper call -----
 #If you only changed variable values in cells 1 and 4 above,

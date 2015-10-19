@@ -294,7 +294,7 @@ class ClickHist:
         self.axes_1DY.xaxis.set_visible(False)
         self.axes_1DY.yaxis.set_visible(False)
 
-        self.figure.text(0.01,0.07,'ClickHist Version 0.16 (Experimental)',fontsize=4)
+        self.figure.text(0.01,0.07,'ClickHist Version 0.17 (Experimental)',fontsize=4)
         self.figure.text(0.01,0.055,'Known bugs:',fontsize=4)
         self.figure.text(0.01,0.04,'Resizing window will break ClickHist',fontsize=4)
         self.figure.text(0.01,0.025,'"Thinking" message without any results',fontsize=4)

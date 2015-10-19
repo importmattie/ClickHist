@@ -56,10 +56,10 @@ timeValueName = 'time'
 #These are optional descriptive inputs to both ClickHist and (some) to ClickHistDo
 #so that the ClickHist and the output bundle are labeled properly
 var1Name = 'HMV'
-var2Name = 'KEDot'
+var2Name = 'SKEDot'
 var1Units = 'm2 s-2'
-var2Units = 'm3 s-3'
-metadata_UD = 'HMV vs KEDot: 0-36 E, 10-30 N'
+var2Units = 'm2 s-3'
+metadata_UD = 'HMV vs SKEDot: 0-36 E, 10-30 N'
 
 #----- Unit correction options -----
 #If the units in the input file are not what is desired, they can be corrected during the load with
