@@ -123,7 +123,7 @@ class ClickHist:
         #Set up interactivity
         self.cid = self.figure.canvas.mpl_connect('button_press_event',self)
         #self.rid = self.figure.canvas.mpl_connect('resize_event',self)
-        self.clicks = 0
+        self.clicksInHist2D = 0
         self.lastClickLoc = -1
         self.lastClickDot = []
         self.lastClickLine = []
@@ -148,7 +148,7 @@ class ClickHist:
     def __call__(self,event):
         if(self.thinking == 0):
             self.thinking = 1
-            self.clicks += 1
+            self.clicksInHist2D += 1
             clear_output()
             print 'Thinking...'
 
@@ -173,7 +173,7 @@ class ClickHist:
                 #Could be optimized? Reorder this so that drawing is after the point is found?
                 locOfMinError = self.findNearestPointToClick(xClickFracInPlot,yClickFracInPlot)
 
-                if(self.clicks > 1):
+                if(self.clicksInHist2D > 1):
                     self.lastClickDot.remove()
                     lineToRemove = self.lastClickLine.pop()
                     lineToRemove.remove()
@@ -204,8 +204,6 @@ class ClickHist:
                     xPercentile = self.findPercentile(self.xData,closestDataX)
                     yPercentile = self.findPercentile(self.yData,closestDataY)
                     self.doObject.do()
-                    #self.doObject.do(self.plotPositionsFlat[locOfMinError],metadata=self.metadata,
-                    #                 xPer=xPercentile,yPer=yPercentile)
                     #This should probably not be touched - it checks for whether or not to reset the closest point
                     self.lastClickLoc = locOfMinError
             elif((self.xPixFracStart < xClickFrac < self.xPixFracEnd) and
@@ -294,7 +292,7 @@ class ClickHist:
         self.axes_1DY.xaxis.set_visible(False)
         self.axes_1DY.yaxis.set_visible(False)
 
-        self.figure.text(0.01,0.07,'ClickHist Version 0.17 (Experimental)',fontsize=4)
+        self.figure.text(0.01,0.07,'ClickHist Version 0.18 (Experimental)',fontsize=4)
         self.figure.text(0.01,0.055,'Known bugs:',fontsize=4)
         self.figure.text(0.01,0.04,'Resizing window will break ClickHist',fontsize=4)
         self.figure.text(0.01,0.025,'"Thinking" message without any results',fontsize=4)
