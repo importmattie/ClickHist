@@ -1,3 +1,12 @@
+version 0.19: 11/19/2015
+- re-fixed a bug where clicking anywhere but in the 2D histogram as the first click upon start would freeze the 2D histogram functionality
+- changes to the ClickHistDo_IDV file requiring a user to specify a start date for the data and an output bundle template
+- switched the default bundle used for GEOS5 CHAD Notebook
+- added a new bundle to the Bundles folder for reanalyses and observations
+- added a MERRA CHAD Notebook for testing (for now loading CFSR into CHAD)
+- experimental: added optional lon/lat width arguments (lonOffset=..., latOffset=...) and time offsets (timeBeforeAfter=...) for IDV bundle processing
+- experimental: added a new script (clickHistIDVPre.py) that preprocesses any IDV bundle for use with CHAD's IDV implementation
+
 version 0.18: 10/29/2015
 - fixed a bug where clicking anywhere but in the 2D histogram as the first click upon start would freeze the 2D histogram functionality
 - updated the 'SKEDot' parameters in the GEOS5 CHAD notebook to reflect new calculations

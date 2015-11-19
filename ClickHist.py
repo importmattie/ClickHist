@@ -148,7 +148,6 @@ class ClickHist:
     def __call__(self,event):
         if(self.thinking == 0):
             self.thinking = 1
-            self.clicksInHist2D += 1
             clear_output()
             print 'Thinking...'
 
@@ -156,7 +155,10 @@ class ClickHist:
             yClickFrac = ((event.y)*1.0)/self.figYPixels
 
             if((self.xPixFracStart < xClickFrac < self.xPixFracEnd) and
-                   (self.yPixFracStart < yClickFrac < self.yPixFracEnd)):
+                (self.yPixFracStart < yClickFrac < self.yPixFracEnd)):
+
+                self.clicksInHist2D += 1
+
                 xClickFracInPlot = (xClickFrac-self.xPixFracStart)/(self.xPixFracLen)
                 yClickFracInPlot = (yClickFrac-self.yPixFracStart)/(self.yPixFracLen)
                 xClickBin = np.searchsorted(self.xBinEdgesFrac,xClickFracInPlot)-1
@@ -292,11 +294,10 @@ class ClickHist:
         self.axes_1DY.xaxis.set_visible(False)
         self.axes_1DY.yaxis.set_visible(False)
 
-        self.figure.text(0.01,0.07,'ClickHist Version 0.18 (Experimental)',fontsize=4)
+        self.figure.text(0.01,0.07,'ClickHist Version 0.19 (Experimental)',fontsize=4)
         self.figure.text(0.01,0.055,'Known bugs:',fontsize=4)
         self.figure.text(0.01,0.04,'Resizing window will break ClickHist',fontsize=4)
-        self.figure.text(0.01,0.025,'"Thinking" message without any results',fontsize=4)
-        self.figure.text(0.01,0.01,'To fix: Restart ClickHist',fontsize=4)
+        self.figure.text(0.01,0.025,'To fix: Restart ClickHist',fontsize=4)
 
         plt.show()
 

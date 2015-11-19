@@ -8,7 +8,7 @@ from subprocess import Popen
 import time
 
 class ClickHistDo:
-    def __init__(self,lons,lats,times,**kwargs):
+    def __init__(self,lons,lats,times,startDatetime,bundle,**kwargs):
 
         self.os = sys.platform
 
@@ -26,7 +26,7 @@ class ClickHistDo:
         self.xPer = 99.9
         self.yPer = 99.9
 
-        self.startDatetime = datetime.datetime(2005,05,16)
+        self.startDatetime = startDatetime
         #This is due to a as-of-yet poorly understood difference between Unix time and IDV time
         #It also doesn't seem to be consistent
         self.timeCorrection = -2*3600
@@ -36,6 +36,8 @@ class ClickHistDo:
         self.timeOffsetBefore = -2*3600*1000
         self.timeOffsetAfter = (-1*self.timeOffsetBefore)+2*3600*1000
 
+        self.bundleInFilename = bundle
+
         self.doObjectHint = 'save IDV bundle...'
 
         #Handle kwargs for output
@@ -43,6 +45,13 @@ class ClickHistDo:
             self.xVarName = kwargs.get('xVarName')
         if(kwargs.has_key('yVarName')):
             self.yVarName = kwargs.get('yVarName')
+        if(kwargs.has_key('lonOffset')):
+            self.lonOffset = kwargs.get('lonOffset')
+        if(kwargs.has_key('latOffset')):
+            self.latOffset = kwargs.get('latOffset')
+        if(kwargs.has_key('timeBeforeAfter')):
+            self.timeOffsetBefore = -1*kwargs.get('timeBeforeAfter')
+            self.timeOffsetAfter = 2*kwargs.get('timeBeforeAfter')
 
     def do(self,flatIndex,**kwargs):
 
@@ -57,7 +66,7 @@ class ClickHistDo:
         print 'Saving IDV bundle...'
 
         currentUnixTime = str(int(time.time()))
-        basisBundleFile = './Bundles/'+'ClickHist_testBundle2.xidv'
+        basisBundleFile = './Bundles/'+self.bundleInFilename
         #Write a line in here to make a more normal, hidden temp directory?
         if(os.path.exists('./Bundles/TempBundles/') == False):
             call('mkdir ./Bundles/TempBundles/',shell=True)
@@ -66,10 +75,10 @@ class ClickHistDo:
         inputLonIndex,inputLatIndex,inputTimeIndex = self.find3DIndices(flatIndex)
         inputLon = self.lons[inputLonIndex]
         inputLat = self.lats[inputLatIndex]
-        inputTime = int(time.mktime((self.startDatetime+datetime.timedelta(0,(self.times[inputTimeIndex]+30)*60
-                                                                           )).timetuple()))
+        inputDatetime = self.startDatetime+datetime.timedelta(0,(self.times[inputTimeIndex]))
+        inputTime = int(time.mktime(inputDatetime.timetuple()))
 
-        print self.startDatetime+datetime.timedelta(0,(self.times[inputTimeIndex]+30)*60)
+        print inputDatetime
         print "{:3.0f}".format(inputLon)+' E '+"{:2.0f}".format(inputLat)+' N'
         if(kwargs.has_key('xyVals')):
             print kwargs.get('xyVals')
@@ -138,7 +147,7 @@ class ClickHistDo:
             call('mkdir ./Bundles/Images/',shell=True)
 
         basisISL = './Bundles/idvMovieOutput_fillIn.isl'
-        tempISL = './Bundles/Images/idvMovieOutput_'+currentUnixTime+'.isl'
+        tempISL = './Bundles/Images/idvImZIDVOutput_'+commonFilename+'.isl'
         #Process via sed
         call('sed \'s/BUNDLENAME/'+commonFilename+'/\' '+basisISL+' > '+tempISL,shell=True)
         call('sed '+backupTag+' \'s/MOVIENAME/'+commonFilename+'/\' '+tempISL,shell=True)
