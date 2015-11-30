@@ -76,7 +76,7 @@ bundleInFilename = 'ClickHist_NewAggG5NRtemplate_smallarea.xidv'
 #Setting parameters for size and time of bundle output
 lonOffset=1.
 latOffset=1.
-timeBeforeAfter=1.
+timeBeforeAfter=1.*3600.
 
 #----- Figure Size and Resolution -----
 #Set the figure x by y resolution, DPI, and the max number of points to appear in a given bin
@@ -225,8 +225,8 @@ lowLatInt,highLatInt = getIntEdges(latValues,latLow,latHigh)
 #----- Bin Edge and Value Data -----
 #Later call to create ClickHist uses the below variable names
 #You should probably leave the names alone
-#var1Edges = cdfIn.variables[var1EdgeName][:]
-#var2Edges = cdfIn.variables[var2EdgeName][:]
+var1Edges = cdfIn.variables[var1EdgeName][:]
+var2Edges = cdfIn.variables[var2EdgeName][:]
 var1Values = cdfIn.variables[var1ValueName][:,lowLatInt:highLatInt+1,lowLonInt:highLonInt+1]*var1ValueMult
 var2Values = cdfIn.variables[var2ValueName][:,lowLatInt:highLatInt+1,lowLonInt:highLonInt+1]*var2ValueMult
 
@@ -249,7 +249,9 @@ get_ipython().magic(u'qtconsole')
 ClickHistDo1 = ClickHistDo.ClickHistDo(lonValues,latValues,timeValues,
                                        startDatetime,
                                        bundleInFilename,
-                                       xVarName=var1ValueName,yVarName=var2ValueName)
+                                       xVarName=var1ValueName,yVarName=var2ValueName,
+                                       lonOffset=lonOffset,latOffset=latOffset,
+                                       timeBeforeAfter=timeBeforeAfter)
 #----- Create a ClickHist instance -----
 ClickHist1 = ClickHist.ClickHist(var1Edges,var2Edges,var1Values,var2Values,
                                 xVarName=var1Name,yVarName=var2Name,

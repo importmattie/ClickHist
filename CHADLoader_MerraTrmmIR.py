@@ -123,7 +123,7 @@ maxPlottedInBin_UD = 1000
 import datetime
 
 #----- Matplotlib for graphics, set tk too -----
-#get_ipython().magic(u'matplotlib tk')
+get_ipython().magic(u'matplotlib tk')
 import matplotlib
 
 #----- Modules for fixing the buffer in cell 3 -----
@@ -205,7 +205,7 @@ cdfIn.close()
 #ClickHist is ready to go!
 
 #This call is necessary to create the output console for ClickHist
-#get_ipython().magic(u'qtconsole')
+get_ipython().magic(u'qtconsole')
 
 #----- Create a ClickHistDo instance -----
 ClickHistDo1 = ClickHistDo.ClickHistDo(lonValues,latValues,timeValues,

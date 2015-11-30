@@ -139,8 +139,8 @@ class ClickHist:
             self.metadata = kwargs.get('metadata')
 
         #Inform the user that the plot was successfully initialized
-        print 'ClickHist Initialized!'
-        print 'Call showPlot() to see plot.'
+        print('ClickHist Initialized!')
+        print('Call showPlot() to see plot.')
 
     #__call__() function
     #Describes what to do when the user clicks on the plot
@@ -148,7 +148,7 @@ class ClickHist:
         if(self.thinking == 0):
             self.thinking = 1
             clear_output()
-            print 'Thinking...'
+            print('Thinking...')
 
             xClickFrac = ((event.x)*1.0)/self.figXPixels
             yClickFrac = ((event.y)*1.0)/self.figYPixels
@@ -219,11 +219,11 @@ class ClickHist:
                 currentBinPercent = "{:.4f}".format((10.**(self.histXLog[currentBin]))*100.)
                 currentBinMem = self.histX[currentBin]
                 clear_output()
-                print 'X-Histogram Value:'
-                print 'Bin '+str(currentBin+1)+':'
-                print self.xFmtStr.format(currentBinEdgeLow)+' - '+self.xFmtStr.format(currentBinEdgeHigh)+\
-                      ' '+self.xUnits
-                print str(int(currentBinMem))+' counts ('+currentBinPercent+'% of all counts)'
+                print('X-Histogram Value:')
+                print('Bin '+str(currentBin+1)+':')
+                print(self.xFmtStr.format(currentBinEdgeLow)+' - '+self.xFmtStr.format(currentBinEdgeHigh)+\
+                      ' '+self.xUnits)
+                print(str(int(currentBinMem))+' counts ('+currentBinPercent+'% of all counts)')
             elif((self.xPixFracStart_1DY < xClickFrac < self.xPixFracEnd_1DY) and
                      (self.yPixFracStart < yClickFrac < self.yPixFracEnd)):
                 currentBin = int(((yClickFrac-self.yPixFracStart)/self.yPixFracLen)*self.yBinNum)
@@ -232,14 +232,14 @@ class ClickHist:
                 currentBinPercent = "{:.4f}".format(((10.**(self.histYLog[currentBin]))*100.))
                 currentBinMem = self.histY[currentBin]
                 clear_output()
-                print 'Y-Histogram Value:'
-                print 'Bin '+str(currentBin+1)+':'
-                print self.yFmtStr.format(currentBinEdgeLow)+' - '+self.yFmtStr.format(currentBinEdgeHigh)+\
-                      ' '+self.yUnits
-                print str(int(currentBinMem))+' counts ('+currentBinPercent+'% of all counts)'
+                print('Y-Histogram Value:')
+                print('Bin '+str(currentBin+1)+':')
+                print(self.yFmtStr.format(currentBinEdgeLow)+' - '+self.yFmtStr.format(currentBinEdgeHigh)+\
+                      ' '+self.yUnits)
+                print(str(int(currentBinMem))+' counts ('+currentBinPercent+'% of all counts)')
             else:
                 clear_output()
-                print '(Non-clickable area...)'
+                print('(Non-clickable area...)')
             self.thinking = 0
 
     def showPlot(self):
@@ -296,17 +296,16 @@ class ClickHist:
         self.axes_1DY.xaxis.set_visible(False)
         self.axes_1DY.yaxis.set_visible(False)
 
-        self.figure.text(0.01,0.07,'ClickHist Version 0.19 (Experimental)',fontsize=4)
-        self.figure.text(0.01,0.055,'Known bugs:',fontsize=4)
-        self.figure.text(0.01,0.04,'Resizing window will break ClickHist',fontsize=4)
-        self.figure.text(0.01,0.025,'To fix: Restart ClickHist',fontsize=4)
+        plt.get_current_fig_manager().window.resizable(False,False)
+
+        self.figure.text(0.01,0.010,'ClickHist Version 0.20 (Open Beta)',fontsize=4)
 
         plt.show()
 
         return
 
     def generatePlotPositions(self):
-        print 'Calculating pos...'
+        print('Calculating pos...')
         plotPositions = []
         plotPositionsFlat = []
         xDataFracFlat = []

@@ -1,3 +1,8 @@
+version 0.20: 11/30/2015
+- ClickHist is now in Open Beta status instead of Experimental (though perhaps just semantics)
+- ClickHist is now locked in resolution, so resizing bug is resolved
+- print statements updated for compatibility with Python 3.x
+
 version 0.19: 11/19/2015
 - re-fixed a bug where clicking anywhere but in the 2D histogram as the first click upon start would freeze the 2D histogram functionality
 - changes to the ClickHistDo_IDV file requiring a user to specify a start date for the data and an output bundle template
