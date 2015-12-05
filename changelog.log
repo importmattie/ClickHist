@@ -1,3 +1,10 @@
+version 0.21: 12/4/2015
+- overhauled the "Bundles" folder for organization; renamed "Output" (new organization will be explained on the wiki soon)
+- updated additional print statements for compatibility with Python 3.x
+- fixed bug where time was not accurate in IDV bundles
+- CHAD: user can now specify the time before and after an event in generated bundles
+- CHAD GEOS5: A few variable names were changed to match changes on the server file
+
 version 0.20: 11/30/2015
 - ClickHist is now in Open Beta status instead of Experimental (though perhaps just semantics)
 - ClickHist is now locked in resolution, so resizing bug is resolved

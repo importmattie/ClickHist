@@ -1,10 +1,10 @@
 __author__ = 'niznik'
 
+import calendar
 import datetime
 import os
 import sys
 from subprocess import call
-from subprocess import Popen
 import time
 
 class ClickHistDo:
@@ -27,14 +27,10 @@ class ClickHistDo:
         self.yPer = 99.9
 
         self.startDatetime = startDatetime
-        #This is due to a as-of-yet poorly understood difference between Unix time and IDV time
-        #It also doesn't seem to be consistent
-        self.timeCorrection = -2*3600
 
         self.lonOffset = 5.0
         self.latOffset = 5.0
-        self.timeOffsetBefore = -2*3600*1000
-        self.timeOffsetAfter = (-1*self.timeOffsetBefore)+2*3600*1000
+        self.dtFromCenter = (2*3600)*1000
 
         self.bundleInFilename = bundle
 
@@ -49,9 +45,8 @@ class ClickHistDo:
             self.lonOffset = kwargs.get('lonOffset')
         if(kwargs.has_key('latOffset')):
             self.latOffset = kwargs.get('latOffset')
-        if(kwargs.has_key('timeBeforeAfter')):
-            self.timeOffsetBefore = -1*kwargs.get('timeBeforeAfter')
-            self.timeOffsetAfter = 2*kwargs.get('timeBeforeAfter')
+        if(kwargs.has_key('dtFromCenter')):
+            self.dtFromCenter = kwargs.get('dtFromCenter')*1000
 
     def do(self,flatIndex,**kwargs):
 
@@ -63,45 +58,55 @@ class ClickHistDo:
         if(kwargs.has_key('yPer')):
             self.yPer = kwargs.get('yPer')
 
-        print 'Saving IDV bundle...'
+        #Make sure output folders exist
+        if(os.path.exists('./Output/Tmp/') == False):
+            call('mkdir ./Output/Tmp/',shell=True)
+        if(os.path.exists('./Output/GeneratedBundles/') == False):
+            call('mkdir ./Output/GeneratedBundles/',shell=True)
+        if(os.path.exists('./Output/GeneratedBundlesZ/') == False):
+            call('mkdir ./Output/GeneratedBundlesZ/',shell=True)
+        if(os.path.exists('./Output/ImageScripts/') == False):
+            call('mkdir ./Output/ImageScripts/',shell=True)
+        if(os.path.exists('./Output/Images/') == False):
+            call('mkdir ./Output/Images/',shell=True)
+
+        print('Saving IDV bundle...')
 
         currentUnixTime = str(int(time.time()))
-        basisBundleFile = './Bundles/'+self.bundleInFilename
-        #Write a line in here to make a more normal, hidden temp directory?
-        if(os.path.exists('./Bundles/TempBundles/') == False):
-            call('mkdir ./Bundles/TempBundles/',shell=True)
-        tempBundleFile = './Bundles/TempBundles/tempBundle_'+currentUnixTime+'.xidv'
+        basisBundleFile = './Output/Templates/'+self.bundleInFilename
+
+        tempBundleFile = './Output/Tmp/tempBundle_'+currentUnixTime+'.xidv'
 
         inputLonIndex,inputLatIndex,inputTimeIndex = self.find3DIndices(flatIndex)
         inputLon = self.lons[inputLonIndex]
         inputLat = self.lats[inputLatIndex]
         inputDatetime = self.startDatetime+datetime.timedelta(0,(self.times[inputTimeIndex]))
-        inputTime = int(time.mktime(inputDatetime.timetuple()))
+        inputTime = int(calendar.timegm(inputDatetime.timetuple()))
 
-        print inputDatetime
-        print "{:3.0f}".format(inputLon)+' E '+"{:2.0f}".format(inputLat)+' N'
+        print(inputDatetime)
+        print("{:3.0f}".format(inputLon)+' E '+"{:2.0f}".format(inputLat)+' N')
         if(kwargs.has_key('xyVals')):
-            print kwargs.get('xyVals')
+            print(kwargs.get('xyVals'))
 
         westLon = str(inputLon-self.lonOffset)
         eastLon = str(inputLon+self.lonOffset)
         southLat = str(inputLat-self.latOffset)
         northLat = str(inputLat+self.latOffset)
 
-        adjTime = (inputTime+self.timeCorrection)*1000
+        adjTime = int(inputTime)*1000
 
-        startTime = str(adjTime+self.timeOffsetBefore)
-        endTime = str(adjTime+self.timeOffsetAfter)
-        startOffset = str(self.timeOffsetBefore/(60.*1000.))
-        endOffset = str(self.timeOffsetAfter/(60.*1000.))
+        startTime = str(adjTime-self.dtFromCenter)
+        endTime = str(adjTime+self.dtFromCenter)
+        #IDV wants these in minutes
+        startOffset = str(0)
+        endOffset = str((self.dtFromCenter*2)/(60*1000))
 
-        #This needs to be fixed eventually
         timeTag = self.convertToYMDT(inputTime)
         commonFilename = self.xVarName+'_'+self.yVarName+'_'+\
                          "{:003.0f}".format(min(10*self.xPer,999))+'_'+\
                          "{:003.0f}".format(min(10*self.yPer,999))+'_'+\
                           str("%03i"%inputLon)+'_'+str("%02i"%inputLat)+'_'+timeTag
-        finalBundleFile = './Bundles/'+commonFilename+'.xidv'
+        finalBundleFile = './Output/GeneratedBundles/'+commonFilename+'.xidv'
 
         centerLonFiller = '-154.123456789'
         lonLenFiller = '10.123456789'
@@ -141,13 +146,10 @@ class ClickHistDo:
         call('mv '+tempBundleFile+' '+finalBundleFile,shell=True)
         call('rm '+tempBundleFile+'.bckp',shell=True)
 
-        print 'Saved!'
+        print('Saved!')
 
-        if(os.path.exists('./Bundles/Images/') == False):
-            call('mkdir ./Bundles/Images/',shell=True)
-
-        basisISL = './Bundles/idvMovieOutput_fillIn.isl'
-        tempISL = './Bundles/Images/idvImZIDVOutput_'+commonFilename+'.isl'
+        basisISL = './Output/Templates/idvMovieOutput_fillIn.isl'
+        tempISL = './Output/ImageScripts/idvImZIDVOutput_'+commonFilename+'.isl'
         #Process via sed
         call('sed \'s/BUNDLENAME/'+commonFilename+'/\' '+basisISL+' > '+tempISL,shell=True)
         call('sed '+backupTag+' \'s/MOVIENAME/'+commonFilename+'/\' '+tempISL,shell=True)
@@ -158,7 +160,8 @@ class ClickHistDo:
 
     def convertToYMDT(self,unixTime):
         #Check for timezones in next version
-        ymdt = datetime.datetime.fromtimestamp(unixTime)
+        #ymdt = datetime.datetime.fromtimestamp(unixTime)
+        ymdt = datetime.datetime.utcfromtimestamp(unixTime)
         return str(ymdt.year)+"{:02.0f}".format(ymdt.month)+"{:02.0f}".format(ymdt.day)+'_'+\
                "{:02.0f}".format(ymdt.hour)+"{:02.0f}".format(ymdt.minute)
 

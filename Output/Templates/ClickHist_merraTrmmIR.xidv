@@ -886,7 +886,7 @@
                                                         <long>1117616461000</long>
                                                     </property>
                                                     <property name="RoundTo">
-                                                        <double>180.0</double>
+                                                        <double>360.0</double>
                                                     </property>
                                                     <property name="IntervalMinutes">
                                                         <double>360.0</double>

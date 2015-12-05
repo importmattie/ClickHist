@@ -24,22 +24,22 @@ import numpy as np
 #----- lat in degN (-90 to 90) -----#
 lonLow = 360.-160.
 lonHigh = 360.-120.
-latLow = -20.0
-latHigh = 20.0
+latLow = -25.0
+latHigh = 25.0
 
 #urlToLoadHist = '/path/to/your/directory'
 #----- 1 hourly data -----
 #urlToLoad = 'https://weather.rsmas.miami.edu/repository/opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:L2FsbFZhcnNfcjkweDQ1XzEubmM0/entry.das'
 #----- 3 hourly data -----
-urlToLoad = 'https://weather.rsmas.miami.edu/repository/opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:L2FsbFZhcnNfcjkweDQ1XzMubmM0/entry.das'
+#urlToLoad = 'https://weather.rsmas.miami.edu/repository/opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:L2FsbFZhcnNfcjkweDQ1XzMubmM0/entry.das'
 #----- 6 hourly data -----
-#urlToLoad = 'https://weather.rsmas.miami.edu/repository/opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:L2FsbFZhcnNfcjkweDQ1XzYubmM0/entry.das'
+urlToLoad = 'https://weather.rsmas.miami.edu/repository/opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:L2FsbFZhcnNfcjkweDQ1XzYubmM0/entry.das'
 
 #----- Variable Names -----
 #The appropriate other variables are set below based on this choice
 #Options: Precip, W500, wPuP, TEEF, SKEDot, HMV
-var1Name = 'Precip'
-var2Name = 'W500'
+var1Name = 'ZSKEDot'
+var2Name = 'TEEF'
 
 #----- Set the URL/Filepath for load files as well as the variable names to load -----
 #Note: Loading bin edges is no longer necessary - they could also be manually specified as a numpy array
@@ -72,11 +72,12 @@ startDatetime = datetime.datetime(startYear,startMonth,startDay,
 
 #----- Name of bundle template - no path needed -----
 bundleInFilename = 'ClickHist_NewAggG5NRtemplate_smallarea.xidv'
+#bundleInFilename = 'testSimple.xidv'
 
 #Setting parameters for size and time of bundle output
 lonOffset=1.
 latOffset=1.
-timeBeforeAfter=1.*3600.
+dtFromCenter=4*3600
 
 #----- Figure Size and Resolution -----
 #Set the figure x by y resolution, DPI, and the max number of points to appear in a given bin
@@ -98,10 +99,10 @@ maxPlottedInBin_UD = 1000
 
 #----- Helpful fill-in variables that are set if only the name at top is selected -----
 fmtStrOptions = {'Precip':"{:3.0f}", 'W500':"{:0.3f}", 'wPuP':"{:0.2f}",
-                 'TEEF':"{:3.0f}", 'HMV':"{:2.0f}", 'SKEDot':"{:0.3f}"}
+                 'TEEF':"{:3.0f}", 'HMV':"{:2.0f}", 'ZSKEDot':"{:0.3f}"}
 
 valueNameOptions = {'Precip': 'PREC','W500': 'W','wPuP': 'WPUP',
-                    'TEEF': 'TEF','HMV': 'HMV','SKEDot': 'SKEDOT_ZON'}
+                    'TEEF': 'TEEF','HMV': 'HMV','ZSKEDot': 'ZSKEDOT'}
 
 binOptions = {'Precip': np.array([0.,1.,11.,21.,31.,41.,51.,61.,71.,81.,91.,101.,250.]),
               'W500': np.array([-0.5,-0.135,-0.105,-0.075,-0.045,-0.015,
@@ -111,13 +112,13 @@ binOptions = {'Precip': np.array([0.,1.,11.,21.,31.,41.,51.,61.,71.,81.,91.,101.
               'TEEF': np.array([-20.,20.,60.,100.,140.,180.,220.,
                                  260.,300.,340.,380.,420.,1000.]),
               'HMV': np.array([0.,4.,8.,12.,16.,20.,24.,28.,32.,36.,40.,44.,100.]),
-              'SKEDot': np.array([-5.,-1.10,-0.90,-0.70,-0.50,-0.30,-0.10,
+              'ZSKEDot': np.array([-5.,-1.10,-0.90,-0.70,-0.50,-0.30,-0.10,
                                   0.10,0.30,0.50,0.70,0.90,5.])}
 
 varUnitOptions = {'Precip': 'mm day-1','W500': 'm s-1','wPuP': 'm2 s-2',
-                  'TEEF': 'J m kg-1 s-1','HMV': 'm2 s-2','SKEDot': 'm2 s-3 (x 10^-3)'}
+                  'TEEF': 'J m kg-1 s-1','HMV': 'm2 s-2','ZSKEDot': 'm2 s-3 (x 10^-3)'}
 
-varMultOptions = {'Precip': 86400.,'W500': 1.,'wPuP': 1.,'TEEF': 1.,'HMV': 1.,'SKEDot': 1000.}
+varMultOptions = {'Precip': 86400.,'W500': 1.,'wPuP': 1.,'TEEF': 1.,'HMV': 1.,'ZSKEDot': 1000.}
 
 #----- Set Bin Edges -----
 var1Edges = binOptions[var1Name]
@@ -225,8 +226,8 @@ lowLatInt,highLatInt = getIntEdges(latValues,latLow,latHigh)
 #----- Bin Edge and Value Data -----
 #Later call to create ClickHist uses the below variable names
 #You should probably leave the names alone
-var1Edges = cdfIn.variables[var1EdgeName][:]
-var2Edges = cdfIn.variables[var2EdgeName][:]
+#var1Edges = cdfIn.variables[var1EdgeName][:]
+#var2Edges = cdfIn.variables[var2EdgeName][:]
 var1Values = cdfIn.variables[var1ValueName][:,lowLatInt:highLatInt+1,lowLonInt:highLonInt+1]*var1ValueMult
 var2Values = cdfIn.variables[var2ValueName][:,lowLatInt:highLatInt+1,lowLonInt:highLonInt+1]*var2ValueMult
 
@@ -249,9 +250,9 @@ get_ipython().magic(u'qtconsole')
 ClickHistDo1 = ClickHistDo.ClickHistDo(lonValues,latValues,timeValues,
                                        startDatetime,
                                        bundleInFilename,
-                                       xVarName=var1ValueName,yVarName=var2ValueName,
+                                       xVarName=var1Name,yVarName=var2Name,
                                        lonOffset=lonOffset,latOffset=latOffset,
-                                       timeBeforeAfter=timeBeforeAfter)
+                                       dtFromCenter=dtFromCenter)
 #----- Create a ClickHist instance -----
 ClickHist1 = ClickHist.ClickHist(var1Edges,var2Edges,var1Values,var2Values,
                                 xVarName=var1Name,yVarName=var2Name,
