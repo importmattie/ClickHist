@@ -298,7 +298,7 @@ class ClickHist:
 
         plt.get_current_fig_manager().window.resizable(False,False)
 
-        self.figure.text(0.01,0.010,'ClickHist Version 0.21 (Open Beta)',fontsize=4)
+        self.figure.text(0.01,0.010,'ClickHist Version 0.22 (Open Beta)',fontsize=4)
 
         plt.show()
 

@@ -103,19 +103,29 @@ class ClickHistDo:
 
         timeTag = self.convertToYMDT(inputTime)
         commonFilename = self.xVarName+'_'+self.yVarName+'_'+\
-                         "{:003.0f}".format(min(10*self.xPer,999))+'_'+\
-                         "{:003.0f}".format(min(10*self.yPer,999))+'_'+\
+                         "{:005.0f}".format(min(1000*self.xPer,99999))+'_'+\
+                         "{:005.0f}".format(min(1000*self.yPer,99999))+'_'+\
                           str("%03i"%inputLon)+'_'+str("%02i"%inputLat)+'_'+timeTag
         finalBundleFile = './Output/GeneratedBundles/'+commonFilename+'.xidv'
 
         centerLonFiller = '-154.123456789'
-        lonLenFiller = '10.123456789'
-        minLonFiller = '-159.1851851835'
-        maxLonFiller = '-149.0617283945'
+        #lonLenFiller = '10.123456789'
+        #minLonFiller = '-159.1851851835'
+        #maxLonFiller = '-149.0617283945'
+        lonLenFiller = '2.123456789'
+        minLonFiller = '-155.1851851835'
+        maxLonFiller = '-153.0617283945'
+        incLonFiller = '0.345678912'
+
         centerLatFiller = '0.135792468'
-        latLenFiller = '7.592592592'
-        minLatFiller = '-3.660503828'
-        maxLatFiller = '3.932088764'
+        #latLenFiller = '7.592592592'
+        #minLatFiller = '-3.660503828'
+        #maxLatFiller = '3.932088764'
+        latLenFiller = '1.592592592'
+        minLatFiller = '-0.660503828'
+        maxLatFiller = '0.932088764'
+        incLatFiller = '0.234567891'
+
         startTimeFiller = '1117594837000'
         endTimeFiller = '1117616461000'
         startOffsetFiller = '-119.87654321'
@@ -136,6 +146,8 @@ class ClickHistDo:
         call('sed '+backupTag+' \'s/'+centerLatFiller+'/'+str(inputLat)+'/\' '+tempBundleFile,shell=True)
         call('sed '+backupTag+' \'s/'+lonLenFiller+'/'+str(self.lonOffset*2)+'/\' '+tempBundleFile,shell=True)
         call('sed '+backupTag+' \'s/'+latLenFiller+'/'+str(self.latOffset*2)+'/\' '+tempBundleFile,shell=True)
+        call('sed '+backupTag+' \'s/'+incLonFiller+'/'+str(self.lonOffset/2.)+'/\' '+tempBundleFile,shell=True)
+        call('sed '+backupTag+' \'s/'+incLatFiller+'/'+str(self.latOffset/2.)+'/\' '+tempBundleFile,shell=True)
         call('sed '+backupTag+' \'s/'+startTimeFiller+'/'+startTime+'/\' '+tempBundleFile,shell=True)
         call('sed '+backupTag+' \'s/'+endTimeFiller+'/'+endTime+'/\' '+tempBundleFile,shell=True)
         call('sed '+backupTag+' \'s/'+startOffsetFiller+'/'+startOffset+'/\' '+tempBundleFile,shell=True)
@@ -154,7 +166,7 @@ class ClickHistDo:
         call('sed \'s/BUNDLENAME/'+commonFilename+'/\' '+basisISL+' > '+tempISL,shell=True)
         call('sed '+backupTag+' \'s/MOVIENAME/'+commonFilename+'/\' '+tempISL,shell=True)
         call('sed '+backupTag+' \'s/IMAGENAME/'+commonFilename+'/\' '+tempISL,shell=True)
-        #call('sed '+backupTag+' \'s/METADATA/'+self.metadata+'/\' '+tempISL,shell=True)
+        call('sed '+backupTag+' \'s/\"METADATA\"/\"'+self.metadata+'\"/\' '+tempISL,shell=True)
         #clean up backup files
         call('rm '+tempISL+'.bckp',shell=True)
 

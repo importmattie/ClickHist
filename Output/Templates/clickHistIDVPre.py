@@ -20,15 +20,27 @@ outFile = str(sys.argv[2])
 tree = ET.parse(inFile)
 root = tree.getroot()
 
+#lonCen_value = '-154.123456789'
+#lonLen_value = '10.123456789'
+#lonMin_value = '-159.1851851835'
+#lonMax_value = '-149.0617283945'
+
+#latCen_value = '0.135792468'
+#latLen_value = '7.592592592'
+#latMin_value = '-3.660503828'
+#latMax_value = '3.932088764'
+
 lonCen_value = '-154.123456789'
-lonLen_value = '10.123456789'
-lonMin_value = '-159.1851851835'
-lonMax_value = '-149.0617283945'
+lonLen_value = '2.123456789'
+lonMin_value = '-155.1851851835'
+lonMax_value = '-153.0617283945'
+lonInc_value = '0.345678912'
 
 latCen_value = '0.135792468'
-latLen_value = '7.592592592'
-latMin_value = '-3.660503828'
-latMax_value = '3.932088764'
+latLen_value = '1.592592592'
+latMin_value = '-0.660503828'
+latMax_value = '0.932088764'
+latInc_value = '0.234567891'
 
 startTime_value = '1117594837000'
 endTime_value = '1117616461000'
@@ -48,11 +60,11 @@ def main():
 
         #Set the parameters for labeling the latitudes and longitudes
         #Note: There may be inconsistency in attribute order here
-        elif(doesAttribMatch(item,'class','ucar.unidata.view.geoloc.LatLonAxisScaleInfo')):
-            if(doesAttribMatch(item.getparent(),'name','LonAxisScaleInfo')):
-                item[1][0].text = lonMin_value
-            elif(doesAttribMatch(item.getparent(),'name','LatAxisScaleInfo')):
-                item[1][0].text = latMin_value
+        #elif(doesAttribMatch(item,'class','ucar.unidata.view.geoloc.LatLonAxisScaleInfo')):
+            #if(doesAttribMatch(item.getparent(),'name','LonAxisScaleInfo')):
+            #    item[1][0].text = lonMin_value
+            #elif(doesAttribMatch(item.getparent(),'name','LatAxisScaleInfo')):
+            #    item[1][0].text = latMin_value
 
         #Set the center of the bounding box
         elif(doesAttribMatch(item,'class','ucar.unidata.geoloc.LatLonPointImpl')):
@@ -78,6 +90,21 @@ def main():
             item[0].text = startOffset_value
         elif(doesAttribMatch(item,'name','EndOffsetMinutes')):
             item[0].text = endOffset_value
+
+        #Set the bounding box information
+        elif(doesAttribMatch(item,'name','BaseLabel')):
+            if(doesAttribMatch(item.getparent(),'class','ucar.unidata.view.geoloc.LatLonAxisScaleInfo')):
+                if(doesAttribMatch(item.getparent().getparent(),'name','LonAxisScaleInfo')):
+                    item[0].text = lonMin_value
+                elif(doesAttribMatch(item.getparent().getparent(),'name','LatAxisScaleInfo')):
+                    item[0].text = latMin_value
+
+        elif(doesAttribMatch(item,'name','Increment')):
+            if(doesAttribMatch(item.getparent(),'class','ucar.unidata.view.geoloc.LatLonAxisScaleInfo')):
+                if(doesAttribMatch(item.getparent().getparent(),'name','LonAxisScaleInfo')):
+                    item[0].text = lonInc_value
+                elif(doesAttribMatch(item.getparent().getparent(),'name','LatAxisScaleInfo')):
+                    item[0].text = latInc_value
 
     #output results
     tree.write(outFile,xml_declaration=True,encoding='ISO-8859-1')

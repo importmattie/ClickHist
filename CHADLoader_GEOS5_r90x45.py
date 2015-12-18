@@ -31,15 +31,15 @@ latHigh = 25.0
 #----- 1 hourly data -----
 #urlToLoad = 'https://weather.rsmas.miami.edu/repository/opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:L2FsbFZhcnNfcjkweDQ1XzEubmM0/entry.das'
 #----- 3 hourly data -----
-#urlToLoad = 'https://weather.rsmas.miami.edu/repository/opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:L2FsbFZhcnNfcjkweDQ1XzMubmM0/entry.das'
+urlToLoad = 'https://weather.rsmas.miami.edu/repository/opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:L2FsbFZhcnNfcjkweDQ1XzMubmM0/entry.das'
 #----- 6 hourly data -----
-urlToLoad = 'https://weather.rsmas.miami.edu/repository/opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:L2FsbFZhcnNfcjkweDQ1XzYubmM0/entry.das'
+#urlToLoad = 'https://weather.rsmas.miami.edu/repository/opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:L2FsbFZhcnNfcjkweDQ1XzYubmM0/entry.das'
 
 #----- Variable Names -----
 #The appropriate other variables are set below based on this choice
 #Options: Precip, W500, wPuP, TEEF, SKEDot, HMV
-var1Name = 'ZSKEDot'
-var2Name = 'TEEF'
+var1Name = 'HMV'
+var2Name = 'Precip'
 
 #----- Set the URL/Filepath for load files as well as the variable names to load -----
 #Note: Loading bin edges is no longer necessary - they could also be manually specified as a numpy array
@@ -75,9 +75,9 @@ bundleInFilename = 'ClickHist_NewAggG5NRtemplate_smallarea.xidv'
 #bundleInFilename = 'testSimple.xidv'
 
 #Setting parameters for size and time of bundle output
-lonOffset=1.
-latOffset=1.
-dtFromCenter=4*3600
+lonOffset=1.0
+latOffset=1.0
+dtFromCenter=3*3600
 
 #----- Figure Size and Resolution -----
 #Set the figure x by y resolution, DPI, and the max number of points to appear in a given bin
@@ -113,7 +113,7 @@ binOptions = {'Precip': np.array([0.,1.,11.,21.,31.,41.,51.,61.,71.,81.,91.,101.
                                  260.,300.,340.,380.,420.,1000.]),
               'HMV': np.array([0.,4.,8.,12.,16.,20.,24.,28.,32.,36.,40.,44.,100.]),
               'ZSKEDot': np.array([-5.,-1.10,-0.90,-0.70,-0.50,-0.30,-0.10,
-                                  0.10,0.30,0.50,0.70,0.90,5.])}
+                                  0.10,0.30,0.50,0.70,0.90,5.])*1.5}
 
 varUnitOptions = {'Precip': 'mm day-1','W500': 'm s-1','wPuP': 'm2 s-2',
                   'TEEF': 'J m kg-1 s-1','HMV': 'm2 s-2','ZSKEDot': 'm2 s-3 (x 10^-3)'}

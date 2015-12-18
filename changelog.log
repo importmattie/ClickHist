@@ -1,3 +1,7 @@
+version 0.22: 12/14/2015
+- updated functionality of GEOS5 bundle
+- changed CHAD output for percentiles to go down to thousandths of a percent
+
 version 0.21: 12/4/2015
 - overhauled the "Bundles" folder for organization; renamed "Output" (new organization will be explained on the wiki soon)
 - updated additional print statements for compatibility with Python 3.x

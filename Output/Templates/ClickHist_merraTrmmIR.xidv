@@ -782,10 +782,10 @@
                                                 </object>
                                                 <object class="java.awt.geom.Rectangle2D$Float">
                                                     <constructor>
-                                                        <float>-159.1851851835</float>
-                                                        <float>-3.660503828</float>
-                                                        <float>10.123456789</float>
-                                                        <float>7.592592592</float>
+                                                        <float>-155.1851851835</float>
+                                                        <float>-0.660503828</float>
+                                                        <float>2.123456789</float>
+                                                        <float>1.592592592</float>
                                                     </constructor>
                                                 </object>
                                             </constructor>
@@ -800,10 +800,10 @@
                                     <property name="LatAxisScaleInfo">
                                         <object class="ucar.unidata.view.geoloc.LatLonAxisScaleInfo">
                                             <property name="Increment">
-                                                <double>5.0</double>
+                                                <double>0.234567891</double>
                                             </property>
                                             <property name="BaseLabel">
-                                                <double>-3.660503828</double>
+                                                <double>-0.660503828</double>
                                             </property>
                                             <property name="CoordFormat">
                                                 <string>DDH</string>
@@ -822,10 +822,10 @@
                                     <property name="LonAxisScaleInfo">
                                         <object class="ucar.unidata.view.geoloc.LatLonAxisScaleInfo">
                                             <property name="Increment">
-                                                <double>5.0</double>
+                                                <double>0.345678912</double>
                                             </property>
                                             <property name="BaseLabel">
-                                                <double>-159.1851851835</double>
+                                                <double>-155.1851851835</double>
                                             </property>
                                             <property name="CoordFormat">
                                                 <string>DDH</string>
@@ -2424,16 +2424,16 @@ http://cookbooks.opengrads.org/index.php?title=Recipe-014:_Accessing_MERRA_data_
                                     <property name="BoundingBox">
                                         <object class="ucar.unidata.data.GeoLocationInfo">
                                             <property name="MaxLat">
-                                                <double>3.932088764</double>
+                                                <double>0.932088764</double>
                                             </property>
                                             <property name="MinLat">
-                                                <double>-3.660503828</double>
+                                                <double>-0.660503828</double>
                                             </property>
                                             <property name="MinLon">
-                                                <double>-159.1851851835</double>
+                                                <double>-155.1851851835</double>
                                             </property>
                                             <property name="MaxLon">
-                                                <double>-149.0617283945</double>
+                                                <double>-153.0617283945</double>
                                             </property>
                                         </object>
                                     </property>
@@ -3002,16 +3002,16 @@ http://cookbooks.opengrads.org/index.php?title=Recipe-014:_Accessing_MERRA_data_
                                     <property name="BoundingBox">
                                         <object class="ucar.unidata.data.GeoLocationInfo">
                                             <property name="MaxLat">
-                                                <double>3.932088764</double>
+                                                <double>0.932088764</double>
                                             </property>
                                             <property name="MinLat">
-                                                <double>-3.660503828</double>
+                                                <double>-0.660503828</double>
                                             </property>
                                             <property name="MinLon">
-                                                <double>-159.1851851835</double>
+                                                <double>-155.1851851835</double>
                                             </property>
                                             <property name="MaxLon">
-                                                <double>-149.0617283945</double>
+                                                <double>-153.0617283945</double>
                                             </property>
                                         </object>
                                     </property>
@@ -3428,16 +3428,16 @@ http://cookbooks.opengrads.org/index.php?title=Recipe-014:_Accessing_MERRA_data_
                                     <property name="BoundingBox">
                                         <object class="ucar.unidata.data.GeoLocationInfo">
                                             <property name="MaxLat">
-                                                <double>3.932088764</double>
+                                                <double>0.932088764</double>
                                             </property>
                                             <property name="MinLat">
-                                                <double>-3.660503828</double>
+                                                <double>-0.660503828</double>
                                             </property>
                                             <property name="MinLon">
-                                                <double>-159.1851851835</double>
+                                                <double>-155.1851851835</double>
                                             </property>
                                             <property name="MaxLon">
-                                                <double>-149.0617283945</double>
+                                                <double>-153.0617283945</double>
                                             </property>
                                         </object>
                                     </property>
@@ -3870,16 +3870,16 @@ http://cookbooks.opengrads.org/index.php?title=Recipe-014:_Accessing_MERRA_data_
                                     <property name="BoundingBox">
                                         <object class="ucar.unidata.data.GeoLocationInfo">
                                             <property name="MaxLat">
-                                                <double>3.932088764</double>
+                                                <double>0.932088764</double>
                                             </property>
                                             <property name="MinLat">
-                                                <double>-3.660503828</double>
+                                                <double>-0.660503828</double>
                                             </property>
                                             <property name="MinLon">
-                                                <double>-159.1851851835</double>
+                                                <double>-155.1851851835</double>
                                             </property>
                                             <property name="MaxLon">
-                                                <double>-149.0617283945</double>
+                                                <double>-153.0617283945</double>
                                             </property>
                                         </object>
                                     </property>
@@ -4311,16 +4311,16 @@ http://cookbooks.opengrads.org/index.php?title=Recipe-014:_Accessing_MERRA_data_
                                     <property name="BoundingBox">
                                         <object class="ucar.unidata.data.GeoLocationInfo">
                                             <property name="MaxLat">
-                                                <double>3.932088764</double>
+                                                <double>0.932088764</double>
                                             </property>
                                             <property name="MinLat">
-                                                <double>-3.660503828</double>
+                                                <double>-0.660503828</double>
                                             </property>
                                             <property name="MinLon">
-                                                <double>-159.1851851835</double>
+                                                <double>-155.1851851835</double>
                                             </property>
                                             <property name="MaxLon">
-                                                <double>-149.0617283945</double>
+                                                <double>-153.0617283945</double>
                                             </property>
                                         </object>
                                     </property>
@@ -4774,16 +4774,16 @@ http://cookbooks.opengrads.org/index.php?title=Recipe-014:_Accessing_MERRA_data_
                                     <property name="BoundingBox">
                                         <object class="ucar.unidata.data.GeoLocationInfo">
                                             <property name="MaxLat">
-                                                <double>3.932088764</double>
+                                                <double>0.932088764</double>
                                             </property>
                                             <property name="MinLat">
-                                                <double>-3.660503828</double>
+                                                <double>-0.660503828</double>
                                             </property>
                                             <property name="MinLon">
-                                                <double>-159.1851851835</double>
+                                                <double>-155.1851851835</double>
                                             </property>
                                             <property name="MaxLon">
-                                                <double>-149.0617283945</double>
+                                                <double>-153.0617283945</double>
                                             </property>
                                         </object>
                                     </property>
@@ -5411,16 +5411,16 @@ To browse for all collections,  Web search "MERRA goldsmr"</string>
                                     <property name="BoundingBox">
                                         <object class="ucar.unidata.data.GeoLocationInfo">
                                             <property name="MaxLat">
-                                                <double>3.932088764</double>
+                                                <double>0.932088764</double>
                                             </property>
                                             <property name="MinLat">
-                                                <double>-3.660503828</double>
+                                                <double>-0.660503828</double>
                                             </property>
                                             <property name="MinLon">
-                                                <double>-159.1851851835</double>
+                                                <double>-155.1851851835</double>
                                             </property>
                                             <property name="MaxLon">
-                                                <double>-149.0617283945</double>
+                                                <double>-153.0617283945</double>
                                             </property>
                                         </object>
                                     </property>
@@ -5910,16 +5910,16 @@ To browse for all collections,  Web search "MERRA goldsmr"</string>
                                     <property name="BoundingBox">
                                         <object class="ucar.unidata.data.GeoLocationInfo">
                                             <property name="MaxLat">
-                                                <double>3.932088764</double>
+                                                <double>0.932088764</double>
                                             </property>
                                             <property name="MinLat">
-                                                <double>-3.660503828</double>
+                                                <double>-0.660503828</double>
                                             </property>
                                             <property name="MinLon">
-                                                <double>-159.1851851835</double>
+                                                <double>-155.1851851835</double>
                                             </property>
                                             <property name="MaxLon">
-                                                <double>-149.0617283945</double>
+                                                <double>-153.0617283945</double>
                                             </property>
                                         </object>
                                     </property>
@@ -6330,16 +6330,16 @@ To browse for all collections,  Web search "MERRA goldsmr"</string>
                                     <property name="BoundingBox">
                                         <object class="ucar.unidata.data.GeoLocationInfo">
                                             <property name="MaxLat">
-                                                <double>3.932088764</double>
+                                                <double>0.932088764</double>
                                             </property>
                                             <property name="MinLat">
-                                                <double>-3.660503828</double>
+                                                <double>-0.660503828</double>
                                             </property>
                                             <property name="MinLon">
-                                                <double>-159.1851851835</double>
+                                                <double>-155.1851851835</double>
                                             </property>
                                             <property name="MaxLon">
-                                                <double>-149.0617283945</double>
+                                                <double>-153.0617283945</double>
                                             </property>
                                         </object>
                                     </property>
