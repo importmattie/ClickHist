@@ -1,3 +1,8 @@
+version 0.23: 1/5/2016
+- updated comments and documentation of the code
+- updated code to comply with PEP 0008
+- removed a few legacy bits of code
+
 version 0.22: 12/14/2015
 - updated functionality of GEOS5 bundle
 - changed CHAD output for percentiles to go down to thousandths of a percent
