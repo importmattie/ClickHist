@@ -1,18 +1,18 @@
 
 # coding: utf-8
 
-# Clickable Histogram (ClickHist)
+# ## Clickable Histogram (ClickHist)
 # 
-# Author: Matthew Niznik (matthew.niznik9@gmail.com)<br>
+# Author: [Matthew Niznik](http://matthewniznik.com) ([matt@matthewniznik.com](mailto:matt@matthewniznik.com))<br>
 # Post-Doctoral Associate, RSMAS, University of Miami
 # 
 # For more information, see:<br>
-# https://sites.google.com/site/matthewjniznik/research/<br>
-# https://sites.google.com/site/matthewjniznik/research/clickhist
+# https://github.com/matthewniznik/ClickHist/wiki<br>
+# http://matthewniznik.com/research-projects/clickhist<br>
 # 
-# (Note: iPython Notebook needs a few tweaks to work most seemlessly with ClickHist instances - those will be pointed out below as they come up.)
+# (Note: iPython Notebook needs a few tweaks to work most seemlessly with ClickHist and ClickHistDo instances - those will be pointed out below as they come up.)
 
-# In[ ]:
+# In[1]:
 
 # User Changeable Parameters (and appropriate libraries)
 
@@ -54,7 +54,7 @@ var1ValueMult = 1.
 var2ValueMult = 1.
 
 
-# In[ ]:
+# In[2]:
 
 # Setting the GUI 
 # ClickHist is currently optimized for tk
@@ -79,7 +79,7 @@ import ClickHist
 # You can put your custom imports here
 
 
-# In[ ]:
+# In[3]:
 
 # Fixing the output so it isn't buffered
 # See: http://stackoverflow.com/questions/29772158/make-ipython-notebook-print-in-real-time
@@ -98,7 +98,7 @@ class flushfile():
 sys.stdout = flushfile(sys.stdout)
 
 
-# In[ ]:
+# In[4]:
 
 # Create the sample data
 # If you would rather load data in and not manually specify
@@ -108,17 +108,31 @@ sys.stdout = flushfile(sys.stdout)
 # Manual Bin Definition
 # Later call to create ClickHist uses the below variable names
 # You should probably leave the names alone
-var1Edges = np.arange(0,1+0.01,0.1)
-var2Edges = np.arange(0,1+0.01,0.1)
+var1Edges = np.arange(-1.1,1.1+0.01,0.2)
+var2Edges = np.arange(-1.1,1.1+0.01,0.2)
 
 # Manual Value Definition
 # Later call to create ClickHist uses the below variable names
 # You should probably leave the names alone
-var1Values = np.random.rand(10000)
-var2Values = np.random.rand(10000)
+numOfValues = 10000
+#var1Values = (0.5-np.random.rand(numOfValues))*2
+#var2Values = (0.5-np.random.rand(numOfValues))*2
+#var1Values = np.random.normal(loc=0.,scale=0.2,size=numOfValues)
+#var2Values = np.random.normal(loc=0.,scale=0.2,size=numOfValues)
+#randomValues = (0.5-np.random.rand(numOfValues))*2
+randomValues = np.random.normal(loc=0.0,scale=0.25,size=numOfValues)
+var1Values = randomValues+np.random.normal(loc=0.0,scale=0.1,
+                                           size=numOfValues)
+var2Values = np.zeros(numOfValues)
+for i in range(0,numOfValues):
+    if(np.random.random() < 0.5):
+        var2Values[i] = randomValues[i]
+    else:
+        var2Values[i] = -1.*randomValues[i]
+    var2Values[i] = var2Values[i] + np.random.normal(loc=0.0,scale=0.1)
 
 
-# In[ ]:
+# In[5]:
 
 # Create ClickHist using a proper call
 # If you only changed variable values in cells 1 and 4 above,

@@ -1,15 +1,15 @@
 
 # coding: utf-8
 
-# Clickable Histogram (ClickHist) + Atmospheric Data Input =
-# Clickable Histogram of Atmospheric Data (CHAD)
+# ## Clickable Histogram of Atmospheric Data (CHAD)
+# ### *(Clickable Histogram (ClickHist) + Atmospheric Data Input)*
 # 
-# Author: Matthew Niznik (matthew.niznik9@gmail.com)<br>
+# Author: [Matthew Niznik](http://matthewniznik.com) ([matt@matthewniznik.com](mailto:matt@matthewniznik.com))<br>
 # Post-Doctoral Associate, RSMAS, University of Miami
 # 
 # For more information, see:<br>
-# https://sites.google.com/site/matthewjniznik/research/<br>
-# https://sites.google.com/site/matthewjniznik/research/chad
+# https://github.com/matthewniznik/ClickHist/wiki<br>
+# http://matthewniznik.com/research-projects/clickhist<br>
 # 
 # (Note: iPython Notebook needs a few tweaks to work most seemlessly with ClickHist and ClickHistDo instances - those will be pointed out below as they come up.)
 

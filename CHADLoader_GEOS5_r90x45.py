@@ -4,12 +4,12 @@
 # ## Clickable Histogram of Atmospheric Data (CHAD)
 # ### *(Clickable Histogram (ClickHist) + Atmospheric Data Input)*
 # 
-# Author: [Matthew Niznik](https://sites.google.com/site/matthewjniznik/) ([matthew.niznik9@gmail.com](mailto:matthew.niznik9@gmail.com))<br>
+# Author: [Matthew Niznik](http://matthewniznik.com) ([matt@matthewniznik.com](mailto:matt@matthewniznik.com))<br>
 # Post-Doctoral Associate, RSMAS, University of Miami
 # 
 # For more information, see:<br>
 # https://github.com/matthewniznik/ClickHist/wiki<br>
-# https://sites.google.com/site/matthewjniznik/research/<br>
+# http://matthewniznik.com/research-projects/clickhist<br>
 # 
 # (Note: iPython Notebook needs a few tweaks to work most seemlessly with ClickHist and ClickHistDo instances - those will be pointed out below as they come up.)
 
@@ -44,8 +44,8 @@ urlToLoad = ('https://weather.rsmas.miami.edu/repository/'+
 # Variable Names
 # The appropriate other variables are set below based on this choice
 # Options: Precip, W500, wPuP, TEEF, SKEDot, HMV
-var1Name = 'HMV'
-var2Name = 'Precip'
+var1Name = 'Precip'
+var2Name = 'TEEF'
 
 # Set the URL/Filepath for load files as well as
 # the variable names to load
