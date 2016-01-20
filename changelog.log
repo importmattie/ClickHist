@@ -1,3 +1,6 @@
+version 0.24.1: 1/20/2016
+- minor update to add percentile information as a potential information display in CHAD when ClickHistDo's do() is called
+
 version 0.24: 1/20/2016
 - critical update to fix CHAD: value needed to reconstruct lat/lon/time was no longer being passed due to an oversight in the last code clean-up)
 - updates to contact information and websites on Jupyter notebooks

@@ -153,6 +153,9 @@ class ClickHistDo:
         print("{:3.0f}".format(inputLon)+' E '+"{:2.0f}".format(inputLat)+' N')
         if(kwargs.has_key('xyVals')):
             print(kwargs.get('xyVals'))
+        if(kwargs.has_key('xPer') and kwargs.has_key('yPer')):
+            print('x%: '+"{:2.3f}".format(kwargs.get('xPer'))+' '+
+                  'y%: '+"{:2.3f}".format(kwargs.get('yPer')))
 
         # Based on the lon, lat, and time, determine all necessary input
         # to create an .xidv bundle
