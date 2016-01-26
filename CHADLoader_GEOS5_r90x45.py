@@ -25,7 +25,7 @@ import numpy as np
 lonLow = 360.-160.
 lonHigh = 360.-120.
 latLow = -25.0
-latHigh = 25.0
+latHigh = 15.0
 
 # urlToLoadHist = '/path/to/your/directory'
 # --- 1 hourly data ---
@@ -177,8 +177,11 @@ var2ValueMult = varMultOptions[var2Name]
 # https://ipython.org/ipython-doc/3/interactive/magics.html
 
 # matplotlib for graphics, set tk too
+# (Note: for debugging, replace '%' command with
+# matplotlib.use)
 get_ipython().magic(u'matplotlib tk')
 import matplotlib
+#matplotlib.use('TkAgg')
 
 # Modules for fixing the buffer in cell 3 
 from IPython.display import clear_output
@@ -269,6 +272,7 @@ cdfIn.close()
 # ClickHist is ready to go!
 
 # This call is necessary to create the output console for ClickHist
+# (Note: for debugging, comment out '%' command)
 get_ipython().magic(u'qtconsole')
 
 # Create a ClickHistDo instance

@@ -16,6 +16,22 @@
 
 # User Changeable Parameters (and appropriate libraries)
 
+# Provide the path and filename of the data
+# Obviously, the user is probably not 'niznik'
+pathToData = '/Users/niznik/Desktop/GLORYS/'
+filename = 'GLORYS2V3_20070101-20070105_gridS.nc4'
+
+# Names needed to load the variables from the netCDF4 input
+var1ValueName = 'vosaline'
+lonValueName = 'nav_lon'
+latValueName = 'nav_lat'
+timeValueName = 'time_counter'
+var2ValueName = latValueName
+
+# Provide the startDatetime for ClickHistDo
+import datetime
+startDatetime = datetime.datetime(1991,12,4,0,0,0)
+
 # Figure Size and Resolution
 # Set the figure x by y resolution, DPI, and the max number of points
 # to appear in a given bin
@@ -34,17 +50,17 @@ maxPlottedInBin_UD = 1000
 # For more on Python string formatting, see:
 # (https://mkaz.github.io/2012/10/10/python-string-format/)
 # These are OPTIONAL inputs to ClickHist: xFmtStr=?,yFmtStr=?)
-var1FmtStr = "{:0.3f}"
-var2FmtStr = "{:0.3f}"
+var1FmtStr = "{:1.2f}"
+var2FmtStr = "{:2.0f}"
 
 # Variable Names and Units
 # These are optional descriptive inputs to both ClickHist
 # and (some) to ClickHistDo so that the ClickHist
 # and the output bundle are labeled properly
-var1Name = 'Sample X'
-var2Name = 'Sample Y'
-var1Units = 'units'
-var2Units = 'units'
+var1Name = 'Delta Salinity'
+var2Name = 'Latitude'
+var1Units = 'PSU'
+var2Units = 'Degrees'
 metadata_UD = 'Sample Metadata'
 
 # Unit correction options
@@ -76,10 +92,12 @@ import sys
 import numpy as np
 
 # And obviously import ClickHist and ClickHistDo!
-import ClickHist
+import ClickHist_GLORYS as ClickHist
+import ClickHistDo_GLORYS as ClickHistDo
 
 # User-specified imports
-# You can put your custom imports here
+# Import netCDF4 to load the netCDF input file
+import netCDF4
 
 
 # In[ ]:
@@ -103,36 +121,27 @@ sys.stdout = flushfile(sys.stdout)
 
 # In[ ]:
 
-# Create the sample data
-# If you would rather load data in and not manually specify
-# variable values, this cell (or a new, empty cell above this
-# one) is an appropriate location
+# Load the Data
+cdfIn = netCDF4.Dataset(pathToData+filename,'r')
 
-# Manual Bin Definition
-# Later call to create ClickHist uses the below variable names
-# You should probably leave the names alone
-var1Edges = np.arange(-1.1,1.1+0.01,0.2)
-var2Edges = np.arange(-1.1,1.1+0.01,0.2)
+# Data for ClickHistDo_IDV
+lonValues = cdfIn.variables[lonValueName][:]
+latValues = cdfIn.variables[latValueName][:]
+timeValues = cdfIn.variables[timeValueName][:]
 
-# Manual Value Definition
-# Later call to create ClickHist uses the below variable names
-# You should probably leave the names alone
-numOfValues = 10000
-#var1Values = (0.5-np.random.rand(numOfValues))*2
-#var2Values = (0.5-np.random.rand(numOfValues))*2
-#var1Values = np.random.normal(loc=0.,scale=0.2,size=numOfValues)
-#var2Values = np.random.normal(loc=0.,scale=0.2,size=numOfValues)
-#randomValues = (0.5-np.random.rand(numOfValues))*2
-randomValues = np.random.normal(loc=0.0,scale=0.25,size=numOfValues)
-var1Values = randomValues+np.random.normal(loc=0.0,scale=0.1,
-                                           size=numOfValues)
-var2Values = np.zeros(numOfValues)
-for i in range(0,numOfValues):
-    if(np.random.random() < 0.5):
-        var2Values[i] = randomValues[i]
-    else:
-        var2Values[i] = -1.*randomValues[i]
-    var2Values[i] = var2Values[i] + np.random.normal(loc=0.0,scale=0.1)
+salinity = cdfIn.variables[var1ValueName][:,0,:,:]
+var1Values = np.zeros(salinity.shape)
+timeLen = len(timeValues)
+var1Values[1:timeLen,:,:] = salinity[1:timeLen,:,:]-salinity[0:timeLen-1]
+
+var2Values = np.zeros(var1Values.shape)
+for tt in range(0,var1Values.shape[0]):
+    var2Values[tt,:,:] = latValues[:,:]
+
+cdfIn.close()
+    
+var1Edges = np.arange(-2.2,2.2+0.01,0.4)
+var2Edges = np.arange(60.,90.+0.01,2.)
 
 
 # In[ ]:
@@ -145,14 +154,22 @@ for i in range(0,numOfValues):
 # (Note: for debugging, comment out '%' command)
 get_ipython().magic(u'qtconsole')
 
+# Create a ClickHistDo instance
+ClickHistDo1 = ClickHistDo.ClickHistDo(lonValues,latValues,
+                                       timeValues,startDatetime)
+
 # Create a ClickHist instance
 ClickHist1 = ClickHist.ClickHist(var1Edges,var2Edges,
                                  var1Values,var2Values,
-                                xVarName=var1Name,yVarName=var2Name,
-                                xUnits=var1Units,yUnits=var2Units,
-                                xFmtStr=var1FmtStr,
+                                 xVarName=var1Name,yVarName=var2Name,
+                                 xUnits=var1Units,yUnits=var2Units,
+                                 xFmtStr=var1FmtStr,
                                  yFmtStr=var2FmtStr,
-                                maxPlottedInBin=maxPlottedInBin_UD)
+                                 maxPlottedInBin=maxPlottedInBin_UD)
+
+# Set ClickHistDo1 to be the official "action" for ClickHist
+ClickHist1.setDo(ClickHistDo1)
+
 # Show the ClickHist
 ClickHist1.showPlot()
 

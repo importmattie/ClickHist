@@ -1,3 +1,8 @@
+version 0.25: 1/25/2016
+- added a notebook related to loading GLORYS data for an interested user
+- updated ipython notebooks with commands needed to run in debug mode outside of Jupyter notebooks
+- Added V0.24 fix to ClickHist.py though it isn't needed for the demo (and thus was overlooked)
+
 version 0.24.1: 1/20/2016
 - minor update to add percentile information as a potential information display in CHAD when ClickHistDo's do() is called
 

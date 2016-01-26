@@ -316,7 +316,13 @@ class ClickHist:
                     # This can be edited to do just about anything!
                     # --- USER EDIT FOR CLICKHISTDO ---
                     clear_output()
-                    self.doObject.do()
+                    self.doObject.do(self.plotPos[locOfMinError],
+                                     yVals='X='+
+                                            self.xFmtStr.format(closestDataX)+
+                                            ' '+self.xUnits+
+                                            ' Y='+
+                                            self.yFmtStr.format(closestDataY)+
+                                            ' '+self.yUnits)
                     # --- END USER EDIT FOR CLICKHISTDO ---
                     # This should probably not be touched - it checks for
                     # whether or not to reset the closest point

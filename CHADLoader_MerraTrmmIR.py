@@ -37,8 +37,8 @@ latHigh = 0.
 #urlToLoad = 'http://goldsmr2.sci.gsfc.nasa.gov/dods/MAT1NXFLX'
 #urlToLoad = 'http://goldsmr2.sci.gsfc.nasa.gov/opendap/MERRA/MAT1NXFLX.5.2.0/1979/01/MERRA100.prod.assim.tavg1_2d_flx_Nx.19790101.hdf'
 # Temporarily using CFSR data in lieu of MERRA
-urlToLoad = 'https://weather.rsmas.miami.edu/repository/opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:L0NGU1JfcjE0NHg3Ml8yNC5uYzQ=/entry.das'
-
+#urlToLoad = 'https://weather.rsmas.miami.edu/repository/opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:L0NGU1JfcjE0NHg3Ml8yNC5uYzQ=/entry.das'
+urlToLoad = 'http://weather.rsmas.miami.edu/repository/opendap/synth:28309f4c-d02c-43bc-8e67-d959a3a2ee49:L01FUlJBLnByb2QuYXNzaW0udGF2ZzFfMmRfbG5kX054LjE5OTdfMjAxNF9maXhlZC5uYw==/entry.das'
 # Variable names in input file(s) for bin edges and values
 var1ValueName = 'precip'
 var2ValueName = 'olr'
@@ -130,8 +130,11 @@ maxPlottedInBin_UD = 1000
 import datetime
 
 # Matplotlib for graphics, set tk too
+# (Note: for debugging, replace '%' command with
+# matplotlib.use)
 get_ipython().magic(u'matplotlib tk')
 import matplotlib
+#matplotlib.use('TkAgg')
 
 # Modules for fixing the buffer in cell 3
 from IPython.display import clear_output
@@ -213,6 +216,7 @@ cdfIn.close()
 # ClickHist is ready to go!
 
 # This call is necessary to create the output console for ClickHist
+# (Note: for debugging, comment out '%' command)
 get_ipython().magic(u'qtconsole')
 
 # Create a ClickHistDo instance
