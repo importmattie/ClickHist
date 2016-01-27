@@ -129,11 +129,14 @@ maxPlottedInBin_UD = 1000
 # datetime for setting the first data point's time
 import datetime
 
-# Matplotlib for graphics, set tk too
+# matplotlib for graphics, set tk too
+# %matplotlib osx is experimental
+get_ipython().magic(u'matplotlib tk')
+#%matplotlib osx
+import matplotlib
+
 # (Note: for debugging, replace '%' command with
 # matplotlib.use)
-get_ipython().magic(u'matplotlib tk')
-import matplotlib
 #matplotlib.use('TkAgg')
 
 # Modules for fixing the buffer in cell 3

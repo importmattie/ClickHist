@@ -62,10 +62,13 @@ var2ValueMult = 1.
 # https://ipython.org/ipython-doc/3/interactive/magics.html
 
 # matplotlib for graphics, set tk too
+# %matplotlib osx is experimental
+get_ipython().magic(u'matplotlib tk')
+#%matplotlib osx
+import matplotlib
+
 # (Note: for debugging, replace '%' command with
 # matplotlib.use)
-get_ipython().magic(u'matplotlib tk')
-import matplotlib
 #matplotlib.use('TkAgg')
 
 # Modules for fixing the buffer in cell 3 

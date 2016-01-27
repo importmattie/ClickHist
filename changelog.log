@@ -1,3 +1,7 @@
+version 0.26: 1/27/2016
+- added an anaconda environment file so that the user can more easily determine the proper python dependencies
+- added the option for users in OS X to use that backend in the notebooks
+
 version 0.25: 1/25/2016
 - added a notebook related to loading GLORYS data for an interested user
 - updated ipython notebooks with commands needed to run in debug mode outside of Jupyter notebooks
