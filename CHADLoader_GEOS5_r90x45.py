@@ -178,7 +178,7 @@ var2ValueMult = varMultOptions[var2Name]
 
 # matplotlib for graphics, set tk too
 # %matplotlib osx is experimental
-get_ipython().magic(u'matplotlib tk')
+get_ipython().magic('matplotlib tk')
 #%matplotlib osx
 import matplotlib
 
@@ -276,7 +276,7 @@ cdfIn.close()
 
 # This call is necessary to create the output console for ClickHist
 # (Note: for debugging, comment out '%' command)
-get_ipython().magic(u'qtconsole')
+get_ipython().magic('qtconsole')
 
 # Create a ClickHistDo instance
 ClickHistDo1 = ClickHistDo.ClickHistDo(lonValues,latValues,

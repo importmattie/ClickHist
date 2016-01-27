@@ -1,3 +1,7 @@
+version 0.26.1: 1/27/2016
+- added an anaconda environment file for python 3.4
+- updated the code to remove .has_key() and .get() calls for dictionaries, which are absent from python 3.x
+
 version 0.26: 1/27/2016
 - added an anaconda environment file so that the user can more easily determine the proper python dependencies
 - added the option for users in OS X to use that backend in the notebooks

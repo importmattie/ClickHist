@@ -47,8 +47,8 @@ class ClickHistDo:
         # And if passed, the values of X and Y as well
         print(inputDatetime)
         print("{:3.0f}".format(inputLon)+' E '+"{:2.0f}".format(inputLat)+' N')
-        if(kwargs.has_key('xyVals')):
-            print(kwargs.get('xyVals'))
+        if('xyVals' in kwargs):
+            print(kwargs['xyVals'])
 
         return
 

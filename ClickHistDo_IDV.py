@@ -69,16 +69,16 @@ class ClickHistDo:
         self.doObjectHint = 'save IDV bundle...'
 
         #Handle kwargs for output
-        if(kwargs.has_key('xVarName')):
-            self.xVarName = kwargs.get('xVarName')
-        if(kwargs.has_key('yVarName')):
-            self.yVarName = kwargs.get('yVarName')
-        if(kwargs.has_key('lonOffset')):
-            self.lonOffset = kwargs.get('lonOffset')
-        if(kwargs.has_key('latOffset')):
-            self.latOffset = kwargs.get('latOffset')
-        if(kwargs.has_key('dtFromCenter')):
-            self.dtFromCenter = kwargs.get('dtFromCenter')*1000
+        if('xVarName' in kwargs):
+            self.xVarName = kwargs['xVarName']
+        if('yVarName' in kwargs):
+            self.yVarName = kwargs['yVarName']
+        if('lonOffset' in kwargs):
+            self.lonOffset = kwargs['lonOffset']
+        if('latOffset' in kwargs):
+            self.latOffset = kwargs['latOffset']
+        if('dtFromCenter' in kwargs):
+            self.dtFromCenter = kwargs['dtFromCenter']*1000
 
     def do(self,flatIndex,**kwargs):
 
@@ -97,12 +97,12 @@ class ClickHistDo:
 
         # Check if the metadata tag was included
         # Also check if the x and y percentiles were passed along
-        if(kwargs.has_key('metadata')):
-            self.metadata = kwargs.get('metadata')
-        if(kwargs.has_key('xPer')):
-            self.xPer = kwargs.get('xPer')
-        if(kwargs.has_key('yPer')):
-            self.yPer = kwargs.get('yPer')
+        if('metadata' in kwargs):
+            self.metadata = kwargs['metadata']
+        if('xPer' in kwargs):
+            self.xPer = kwargs['xPer']
+        if('yPer' in kwargs):
+            self.yPer = kwargs['yPer']
 
         # Make sure output folders exist
         #
@@ -151,11 +151,11 @@ class ClickHistDo:
         # And if passed, the values of X and Y as well
         print(inputDatetime)
         print("{:3.0f}".format(inputLon)+' E '+"{:2.0f}".format(inputLat)+' N')
-        if(kwargs.has_key('xyVals')):
-            print(kwargs.get('xyVals'))
-        if(kwargs.has_key('xPer') and kwargs.has_key('yPer')):
-            print('x%: '+"{:2.3f}".format(kwargs.get('xPer'))+' '+
-                  'y%: '+"{:2.3f}".format(kwargs.get('yPer')))
+        if('xyVals' in kwargs):
+            print(kwargs['xyVals'])
+        if(('xPer' in kwargs) and ('yPer' in kwargs)):
+            print('x%: '+"{:2.3f}".format(kwargs['xPer'])+' '+
+                  'y%: '+"{:2.3f}".format(kwargs['yPer']))
 
         # Based on the lon, lat, and time, determine all necessary input
         # to create an .xidv bundle

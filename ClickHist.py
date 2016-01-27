@@ -1,5 +1,5 @@
 __author__ = 'niznik'
-__version__ = '0.26'
+__version__ = '0.26.1'
 
 # ClickHist takes care of the interactive, 2D visualization of the input
 # data and passes on data from click events to an instance of the
@@ -47,14 +47,14 @@ class ClickHist:
         self.figDPIReq = 150
         self.scatmarksize = int((self.figXPixelsReq+self.figYPixelsReq)/320)
 
-        if(kwargs.has_key('maxPlottedInBin')):
-            self.maxPlottedInBin = kwargs.get('maxPlottedInBin')
-        if(kwargs.has_key('figX')):
-            self.figXPixelsReq = kwargs.get('figX')
-        if(kwargs.has_key('figY')):
-            self.figYPixelsReq = kwargs.get('figY')
-        if(kwargs.has_key('figDPI')):
-            self.figDPIReq = kwargs.get('figDPI')
+        if('maxPlottedInBin' in kwargs):
+            self.maxPlottedInBin = kwargs['maxPlottedInBin']
+        if('figX' in kwargs):
+            self.figXPixelsReq = kwargs['figX']
+        if('figY' in kwargs):
+            self.figYPixelsReq = kwargs['figY']
+        if('figDPI' in kwargs):
+            self.figDPIReq = kwargs['figDPI']
 
         # Set the default formatting of the axes for output
         # kwargs may replace these (xVarName, yVarName, xUnits, yUnits,
@@ -66,18 +66,18 @@ class ClickHist:
         self.xFmtStr = "{:.1f}"
         self.yFmtStr = "{:.1f}"
 
-        if(kwargs.has_key('xVarName')):
-            self.xVarName = kwargs.get('xVarName')
-        if(kwargs.has_key('yVarName')):
-            self.yVarName = kwargs.get('yVarName')
-        if(kwargs.has_key('xUnits')):
-            self.xUnits = kwargs.get('xUnits')
-        if(kwargs.has_key('yUnits')):
-            self.yUnits = kwargs.get('yUnits')
-        if(kwargs.has_key('xFmtStr')):
-            self.xFmtStr = kwargs.get('xFmtStr')
-        if(kwargs.has_key('yFmtStr')):
-            self.yFmtStr = kwargs.get('yFmtStr')
+        if('xVarName' in kwargs):
+            self.xVarName = kwargs['xVarName']
+        if('yVarName' in kwargs):
+            self.yVarName = kwargs['yVarName']
+        if('xUnits' in kwargs):
+            self.xUnits = kwargs['xUnits']
+        if('yUnits' in kwargs):
+            self.yUnits = kwargs['yUnits']
+        if('xFmtStr' in kwargs):
+            self.xFmtStr = kwargs['xFmtStr']
+        if('yFmtStr' in kwargs):
+            self.yFmtStr = kwargs['yFmtStr']
 
         # Set parameters that help place the 2D histogram locations
         # These should not change unless you want to experiment with placements
@@ -195,8 +195,8 @@ class ClickHist:
 
         # Set metadata, if any, passed by the user (default to blank)
         self.metadata = ''
-        if(kwargs.has_key('metadata')):
-            self.metadata = kwargs.get('metadata')
+        if('metadata' in kwargs):
+            self.metadata = kwargs['metadata']
 
         # Inform the user that the plot was successfully initialized
         print('ClickHist Initialized!')
