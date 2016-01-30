@@ -1,6 +1,5 @@
 __author__ = 'niznik'
 
-import calendar
 import datetime
 
 # ClickHistDo is very much specific to the implementation of ClickHist

@@ -1,3 +1,7 @@
+version 0.27: 1/29/2016
+- added a notebook for loading in CMIP5 data
+- wrote a ClickHistDo to make plots of variables from CMIP5 models if of interest in an interactively changing second window
+
 version 0.26.1: 1/27/2016
 - added an anaconda environment file for python 3.4
 - updated the code to remove .has_key() and .get() calls for dictionaries, which are absent from python 3.x

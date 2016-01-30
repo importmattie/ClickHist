@@ -63,7 +63,7 @@ var2ValueMult = 1.
 
 # matplotlib for graphics, set tk too
 # %matplotlib osx is experimental
-get_ipython().magic('matplotlib tk')
+get_ipython().magic(u'matplotlib tk')
 #%matplotlib osx
 import matplotlib
 
@@ -146,7 +146,7 @@ for i in range(0,numOfValues):
 
 # This call is necessary to create the output console for ClickHist
 # (Note: for debugging, comment out '%' command)
-get_ipython().magic('qtconsole')
+get_ipython().magic(u'qtconsole')
 
 # Create a ClickHist instance
 ClickHist1 = ClickHist.ClickHist(var1Edges,var2Edges,

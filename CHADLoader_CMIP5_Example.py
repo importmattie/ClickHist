@@ -22,47 +22,53 @@ import numpy as np
 # All must be defined
 # lon in degE (-180 to 180)
 # lat in degN (-90 to 90)
-lonLow = -160.
-lonHigh = -140.
-latLow = -20.
-latHigh = 0.
+lonLow = 360.-139.
+lonHigh = 360.-121.
+latLow = -19.
+latHigh = -11.
+
+# Different values for plotting
+lonLowPlot = 121.
+lonHighPlot = 360.-61.
+latLowPlot = -59.
+latHighPlot = 19.
+
+# Vertical level, if applicable
+lev = 1
 
 # Set the URL/Filepath for load files as well as the variable
 # names to load
-# Note: Loading bin edges is no longer necessary - they could also
-# be manually specified as a numpy array and passed to ClickHist.
-# This is a relic of when ClickHist needed a histogram passed to it.
+urlToLoad1 = 'http://data1.gfdl.noaa.gov:9192/opendap/CMIP5/output1/NOAA-GFDL/GFDL-CM3/historical/day/atmos/day/r1i1p1/v20110601/pr/pr_day_GFDL-CM3_historical_r1i1p1_20000101-20041231.nc'
+urlToLoad2 = 'http://data1.gfdl.noaa.gov:9192/opendap/CMIP5/output1/NOAA-GFDL/GFDL-CM3/historical/day/atmos/day/r1i1p1/v20110601/hus/hus_day_GFDL-CM3_historical_r1i1p1_20000101-20041231.nc'
+urlToLoad3 = 'http://data1.gfdl.noaa.gov:9192/opendap/CMIP5/output1/NOAA-GFDL/GFDL-CM3/historical/day/atmos/day/r1i1p1/v20120227/ua/ua_day_GFDL-CM3_historical_r1i1p1_20000101-20041231.nc'
 
-# urlToLoadHist = '/path/to/your/directory'
-#urlToLoad = 'http://goldsmr2.sci.gsfc.nasa.gov/dods/MAT1NXFLX'
-#urlToLoad = 'http://goldsmr2.sci.gsfc.nasa.gov/opendap/MERRA/MAT1NXFLX.5.2.0/1979/01/MERRA100.prod.assim.tavg1_2d_flx_Nx.19790101.hdf'
-# Temporarily using CFSR data in lieu of MERRA
-#urlToLoad = 'https://weather.rsmas.miami.edu/repository/opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:L0NGU1JfcjE0NHg3Ml8yNC5uYzQ=/entry.das'
-urlToLoad = 'http://weather.rsmas.miami.edu/repository/opendap/synth:28309f4c-d02c-43bc-8e67-d959a3a2ee49:L01FUlJBLnByb2QuYXNzaW0udGF2ZzFfMmRfbG5kX054LjE5OTdfMjAxNF9maXhlZC5uYw==/entry.das'
 # Variable names in input file(s) for bin edges and values
-var1ValueName = 'precip'
-var2ValueName = 'olr'
+var1ValueName = 'ua'
+var2ValueName = 'hus'
+plotVarValueName = 'pr'
 
 # Unit correction options
 # If the units in the input file are not what is desired,
 # they can be corrected during the load with these multipliers.
-var1ValueMult = 86400.
-var2ValueMult = 1.
+var1ValueMult = 1.
+var2ValueMult = 1000.
 
 # Manual Bin Definition
 # Later call to create ClickHist uses the below variable names
 # You should probably leave the names alone
-var1Edges = np.arange(0,100.+0.01,10.)
-var2Edges = np.arange(120.,320.+0.01,20.)
+var1Edges = np.arange(-21.,21.+0.01,2.)
+var1Edges = np.append(var1Edges,250.)
+var2Edges = np.arange(8.,16.+0.01,0.5)
+var2Edges = np.append(0.,var2Edges)
 
 # Variable Names and Units
 # These are optional descriptive inputs to both ClickHist and
 # (some) to ClickHistDo so that the ClickHist and the output
 # bundle are labeled properly
-var1Name = 'Total Precipitation'
-var2Name = 'Outgoing Longwave Radiation'
-var1Units = 'mm day-1'
-var2Units = 'W m-2'
+var1Name = 'Zonal Wind at 850 hPa'
+var2Name = 'Specific Humidity at 850 hPa'
+var1Units = 'm s-1'
+var2Units = 'g kg-1'
 metadata_UD = (var1ValueName+' vs '+var2ValueName+': '+
                str(lonLow)+' to '+str(lonHigh)+' E, '+
                str(latLow)+' to '+str(latHigh)+' N')
@@ -73,8 +79,8 @@ metadata_UD = (var1ValueName+' vs '+var2ValueName+': '+
 # For more on Python string formatting, see:
 # (https://mkaz.github.io/2012/10/10/python-string-format/)
 # These are OPTIONAL inputs to ClickHist: xFmtStr=?,yFmtStr=?)
-var1FmtStr = "{:3.0f}"
-var2FmtStr = "{:3.0f}"
+var1FmtStr = "{:2.1f}"
+var2FmtStr = "{:2.1f}"
 
 # Variable names in input file(s) for data needed for ClickHistDo_IDV
 lonValueName = 'lon'
@@ -92,7 +98,7 @@ timeValueOffset = 0
 # for the time variable later on. This might be different
 # from the time of the first data if timeValues[0] is not 0.
 import datetime
-startYear = 1979
+startYear = 1860
 startMonth = 1
 startDay = 1
 startHour = 0
@@ -100,9 +106,6 @@ startMinute = 0
 startSecond = 0
 startDatetime = datetime.datetime(startYear,startMonth,startDay,
                                   startHour,startMinute,startSecond)
-
-# Name of bundle template - no path needed
-bundleInFilename = 'ClickHist_merraTrmmIR.xidv'
 
 # Figure Size and Resolution
 # Set the figure x by y resolution, DPI, and the max number of points
@@ -121,13 +124,10 @@ maxPlottedInBin_UD = 1000
 
 # In[ ]:
 
-# Setting the GUI
+# Setting the GUI 
 # ClickHist is currently optimized for tk
 # For more options see section "%matplotlib" at
 # https://ipython.org/ipython-doc/3/interactive/magics.html
-
-# datetime for setting the first data point's time
-import datetime
 
 # matplotlib for graphics, set tk too
 # %matplotlib osx is experimental
@@ -139,16 +139,19 @@ import matplotlib
 # matplotlib.use)
 #matplotlib.use('TkAgg')
 
-# Modules for fixing the buffer in cell 3
+# Modules for fixing the buffer in cell 3 
 from IPython.display import clear_output
 import sys
 
+# numpy to create the sample input arrays
+import numpy as np
+
 # And obviously import ClickHist and ClickHistDo!
-import ClickHist_IDV as ClickHist
-import ClickHistDo_IDV as ClickHistDo
+import ClickHist_CMIP5 as ClickHist
+import ClickHistDo_CMIP5 as ClickHistDo
 
 # User-specified imports
-# Import netCDF4 to load the netCDF input file
+# netCDF4 to load the netCDF input file
 import netCDF4
 
 
@@ -181,15 +184,15 @@ def getIntEdges(dim,low,high):
 # In[ ]:
 
 # Load the Data
-cdfIn = netCDF4.Dataset(urlToLoad,'r')
+cdfIn = netCDF4.Dataset(urlToLoad3,'r')
 
 # Data for ClickHistDo_IDV
-lonValues = cdfIn.variables[lonValueName][:]
-latValues = cdfIn.variables[latValueName][:]
+lons = cdfIn.variables[lonValueName][:]
+lats = cdfIn.variables[latValueName][:]
 timeValues = cdfIn.variables[timeValueName][:]*timeValueMult
 
-lowLonInt,highLonInt = getIntEdges(lonValues,lonLow,lonHigh)
-lowLatInt,highLatInt = getIntEdges(latValues,latLow,latHigh)
+lowLonInt,highLonInt = getIntEdges(lons,lonLow,lonHigh)
+lowLatInt,highLatInt = getIntEdges(lats,latLow,latHigh)
 
 # Bin Edge and Value Data
 # Later call to create ClickHist uses the below variable names
@@ -201,15 +204,31 @@ lowLatInt,highLatInt = getIntEdges(latValues,latLow,latHigh)
 # match before loading - permutation could potentially take some
 # time.
 #
-#var1Values = cdfIn.variables[var1ValueName][:]
-#var2Values = cdfIn.variables[var2ValueName][:]
-var1Values = cdfIn.variables[var1ValueName][:,lowLatInt:highLatInt+1,lowLonInt:highLonInt+1]*var1ValueMult
-var2Values = cdfIn.variables[var2ValueName][:,lowLatInt:highLatInt+1,lowLonInt:highLonInt+1]*var2ValueMult
+#var1Edges = cdfIn.variables[var1EdgeName][:]
+#var2Edges = cdfIn.variables[var2EdgeName][:]
+var1Values = cdfIn.variables[var1ValueName][:,lev,
+                                            lowLatInt:highLatInt+1,
+                                            lowLonInt:highLonInt+1]*\
+                                            var1ValueMult
+#var1Values = np.mean(np.mean(var1Values,2),1)
+    
+cdfIn.close()
+cdfIn = netCDF4.Dataset(urlToLoad2,'r')
 
-lonValues = lonValues[lowLonInt:highLonInt+1]
-latValues = latValues[lowLatInt:highLatInt+1]
+var2Values = cdfIn.variables[var2ValueName][:,lev,
+                                            lowLatInt:highLatInt+1,
+                                            lowLonInt:highLonInt+1]*\
+                                            var2ValueMult
+#var2Values = np.mean(np.mean(var2Values,2),1)
 
 cdfIn.close()
+
+# Use this subset for ClickHist
+lonValues = lons[lowLonInt:highLonInt+1]
+latValues = lats[lowLatInt:highLatInt+1]
+
+#lonValues = [np.mean(lons[lowLonInt:highLonInt+1])]
+#latValues = [np.mean(lats[lowLatInt:highLatInt+1])]
 
 
 # In[ ]:
@@ -218,6 +237,9 @@ cdfIn.close()
 # If you only changed variable values in cells 1 and 4 above,
 # ClickHist is ready to go!
 
+lowLonIntPlot,highLonIntPlot = getIntEdges(lons,lonLowPlot,lonHighPlot)
+lowLatIntPlot,highLatIntPlot = getIntEdges(lats,latLowPlot,latHighPlot)
+
 # This call is necessary to create the output console for ClickHist
 # (Note: for debugging, comment out '%' command)
 get_ipython().magic(u'qtconsole')
@@ -225,18 +247,20 @@ get_ipython().magic(u'qtconsole')
 # Create a ClickHistDo instance
 ClickHistDo1 = ClickHistDo.ClickHistDo(lonValues,latValues,
                                        timeValues,startDatetime,
-                                       bundleInFilename,
-                                       xVarName=var1ValueName,
-                                       yVarName=var2ValueName)
+                                       urlToLoad1,plotVarValueName,
+                                       lons,lats,
+                                       (lowLonIntPlot,highLonIntPlot),
+                                       (lowLatIntPlot,highLatIntPlot))
+
 # Create a ClickHist instance
 ClickHist1 = ClickHist.ClickHist(var1Edges,var2Edges,
                                  var1Values,var2Values,
-                                xVarName=var1Name,yVarName=var2Name,
-                                xUnits=var1Units,yUnits=var2Units,
-                                xFmtStr=var1FmtStr,
+                                 xVarName=var1Name,yVarName=var2Name,
+                                 xUnits=var1Units,yUnits=var2Units,
+                                 xFmtStr=var1FmtStr,
                                  yFmtStr=var2FmtStr,
-                                maxPlottedInBin=maxPlottedInBin_UD,
-                                metadata=metadata_UD)
+                                 maxPlottedInBin=maxPlottedInBin_UD,
+                                 metadata=metadata_UD)
 # Set ClickHistDo1 to be the official "action" for ClickHist
 ClickHist1.setDo(ClickHistDo1)
 
