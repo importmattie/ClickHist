@@ -22,20 +22,20 @@ import numpy as np
 # All must be defined
 # lon in degE (0 to 360)
 # lat in degN (-90 to 90)
-lonLow = 360.-160.
-lonHigh = 360.-120.
-latLow = -25.0
-latHigh = 15.0
+lonLow = 360.-88.
+lonHigh = 360.-80.
+latLow = 24.0
+latHigh = 32.0
 
 # urlToLoadHist = '/path/to/your/directory'
 # --- 1 hourly data ---
-#urlToLoad = ('https://weather.rsmas.miami.edu/repository/'+
-#            'opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:'+
-#            'L2FsbFZhcnNfcjkweDQ1XzEubmM0/entry.das')
-# ---  3 hourly data ---
 urlToLoad = ('https://weather.rsmas.miami.edu/repository/'+
-             'opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:'+
-             'L2FsbFZhcnNfcjkweDQ1XzMubmM0/entry.das')
+            'opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:'+
+            'L2FsbFZhcnNfcjkweDQ1XzEubmM0/entry.das')
+# ---  3 hourly data ---
+#urlToLoad = ('https://weather.rsmas.miami.edu/repository/'+
+#             'opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:'+
+#             'L2FsbFZhcnNfcjkweDQ1XzMubmM0/entry.das')
 # --- 6 hourly data ---
 #urlToLoad = ('https://weather.rsmas.miami.edu/repository/'+
 #             'opendap/synth:eab82de2-d682-4dc0-ba8b-2fac7746d269:'+
@@ -43,9 +43,9 @@ urlToLoad = ('https://weather.rsmas.miami.edu/repository/'+
 
 # Variable Names
 # The appropriate other variables are set below based on this choice
-# Options: Precip, W500, wPuP, TEEF, SKEDot, HMV
-var1Name = 'Precip'
-var2Name = 'TEEF'
+# Options: Precip, W500, wPuP, TEEF, ZSKEDot, HMV
+var1Name = 'W500'
+var2Name = 'ZSKEDot'
 
 # Set the URL/Filepath for load files as well as
 # the variable names to load
@@ -241,6 +241,9 @@ timeValues = cdfIn.variables[timeValueName][:]*timeValueMult
 lowLonInt,highLonInt = getIntEdges(lonValues,lonLow,lonHigh)
 lowLatInt,highLatInt = getIntEdges(latValues,latLow,latHigh)
 
+#print lowLonInt,highLonInt
+#print lowLatInt,highLatInt
+
 # Bin Edge and Value Data
 # Later call to create ClickHist uses the below variable names
 # You should probably leave the names alone
@@ -287,7 +290,7 @@ ClickHistDo1 = ClickHistDo.ClickHistDo(lonValues,latValues,
                                        lonOffset=lonOffset,
                                        latOffset=latOffset,
                                        dtFromCenter=dtFromCenter,
-                                       openTab=False)
+                                       openTab=True)
 # Create a ClickHist instance
 ClickHist1 = ClickHist.ClickHist(var1Edges,var2Edges,
                                  var1Values,var2Values,

@@ -1,5 +1,5 @@
 __author__ = 'niznik'
-__version__ = '0.27'
+__version__ = '0.27.1'
 
 # ClickHist takes care of the interactive, 2D visualization of the input
 # data and passes on data from click events to an instance of the
@@ -220,7 +220,7 @@ class ClickHist:
             # Indicate that we're processing a click, clear messages
             self.thinking = 1
             clear_output()
-            print('Thinking...')
+            print('\nThinking...')
 
             # Convert the click to fractional values
             xClickFrac = ((event.x)*1.0)/self.figXPixels

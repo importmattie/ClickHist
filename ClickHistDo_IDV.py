@@ -11,6 +11,7 @@ import os
 import sys
 from subprocess import call
 import time
+import webbrowser
 
 class ClickHistDo:
     def __init__(self,lons,lats,times,startDatetime,bundle,**kwargs):
@@ -65,19 +66,23 @@ class ClickHistDo:
         # Set name of bundle template to alter
         self.bundleInFilename = bundle
 
+        self.openTab = False
+        if 'openTab' in kwargs:
+            self.openTab = kwargs['openTab']
+
         # Set message to give after one click in ClickHist
         self.doObjectHint = 'save IDV bundle...'
 
-        #Handle kwargs for output
-        if('xVarName' in kwargs):
+        # Handle kwargs for output
+        if 'xVarName' in kwargs:
             self.xVarName = kwargs['xVarName']
-        if('yVarName' in kwargs):
+        if 'yVarName' in kwargs:
             self.yVarName = kwargs['yVarName']
-        if('lonOffset' in kwargs):
+        if 'lonOffset' in kwargs:
             self.lonOffset = kwargs['lonOffset']
-        if('latOffset' in kwargs):
+        if 'latOffset' in kwargs:
             self.latOffset = kwargs['latOffset']
-        if('dtFromCenter' in kwargs):
+        if 'dtFromCenter' in kwargs:
             self.dtFromCenter = kwargs['dtFromCenter']*1000
 
     def do(self,flatIndex,**kwargs):
@@ -97,11 +102,11 @@ class ClickHistDo:
 
         # Check if the metadata tag was included
         # Also check if the x and y percentiles were passed along
-        if('metadata' in kwargs):
+        if 'metadata' in kwargs:
             self.metadata = kwargs['metadata']
-        if('xPer' in kwargs):
+        if 'xPer' in kwargs:
             self.xPer = kwargs['xPer']
-        if('yPer' in kwargs):
+        if 'yPer' in kwargs:
             self.yPer = kwargs['yPer']
 
         # Make sure output folders exist
@@ -147,6 +152,18 @@ class ClickHistDo:
         inputDatetime = self.startDatetime+datetime.timedelta(0,(self.times[inputTimeIndex]))
         inputTime = int(calendar.timegm(inputDatetime.timetuple()))
 
+        url = ('http://g5nr.nccs.nasa.gov/static/naturerun/fimages/AEROSOLS/' +
+               'Y'+"{:4d}".format(inputDatetime.year) +
+               '/M'+"{:02d}".format(inputDatetime.month) +
+               '/D'+"{:02d}".format(inputDatetime.day) +
+               '/aerosols_globe_c1440_NR_BETA9-SNAP_' +
+               "{:4d}".format(inputDatetime.year) +
+               "{:02d}".format(inputDatetime.month) +
+               "{:02d}".format(inputDatetime.day) +
+               '_'+"{:02d}".format(inputDatetime.hour) +
+               #"{:02d}".format(inputDatetime.minute) +
+               '00z.png')
+
         # Inform the user of the time and location of the point
         # And if passed, the values of X and Y as well
         print(inputDatetime)
@@ -156,6 +173,9 @@ class ClickHistDo:
         if(('xPer' in kwargs) and ('yPer' in kwargs)):
             print('x%: '+"{:2.3f}".format(kwargs['xPer'])+' '+
                   'y%: '+"{:2.3f}".format(kwargs['yPer']))
+        print('\nLink to aerosol image: '+url)
+        if self.openTab is True:
+            webbrowser.open(url, new=1)
 
         # Based on the lon, lat, and time, determine all necessary input
         # to create an .xidv bundle

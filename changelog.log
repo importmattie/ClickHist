@@ -1,3 +1,7 @@
+version 0.27.1: 2/1/2016
+- added functionality that opens aerosol imagery from the model in a browser tab if enabled at run-time
+- added a new notebook that focuses on Florida with GEOS-5 data
+
 version 0.27: 1/29/2016
 - added a notebook for loading in CMIP5 data
 - wrote a ClickHistDo to make plots of variables from CMIP5 models if of interest in an interactively changing second window
