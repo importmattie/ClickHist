@@ -1,3 +1,7 @@
+version 0.28: 2/3/2016
+- implemented a 'SessionLog' for the GEOS-5 notebooks that keeps track of ClickHist snapshots and other images to track what the user did
+- removed .yml files and replaced with advice for individual user creation of environments in the wiki to avoid clutter
+
 version 0.27.1: 2/1/2016
 - added functionality that opens aerosol imagery from the model in a browser tab if enabled at run-time
 - added a new notebook that focuses on Florida with GEOS-5 data

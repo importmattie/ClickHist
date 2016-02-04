@@ -1,5 +1,5 @@
 __author__ = 'niznik'
-__version__ = '0.27.1'
+__version__ = '0.28'
 
 # ClickHist takes care of the interactive, 2D visualization of the input
 # data and passes on data from click events to an instance of the
@@ -316,6 +316,7 @@ class ClickHist:
                     # This can be edited to do just about anything!
                     # --- USER EDIT FOR CLICKHISTDO ---
                     clear_output()
+                    plt.savefig('./Output/Tmp/mostRecentCH.png')
                     self.doObject.do()
                     # --- END USER EDIT FOR CLICKHISTDO ---
                     # This should probably not be touched - it checks for

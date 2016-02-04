@@ -8,9 +8,9 @@ Author: Matthew Niznik (matthewniznik on Github)
 
 E-mail: matt@matthewniznik.com | mniznik@rsmas.miami.edu
 
-Version 0.27.1
+Version 0.28
 
-Date: 2016-02-01
+Date: 2016-02-03
 
 (Note: ClickHist/CHAD is currently in Open Beta)
 

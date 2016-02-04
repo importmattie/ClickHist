@@ -18,6 +18,9 @@
 # User Changeable Parameters (and appropriate libraries)
 import numpy as np
 
+# Notebook name for saving progress in ./Output/SessionLogs/
+sessionLogFilename = 'mySession'
+
 # Regions to be loaded from the file
 # All must be defined
 # lon in degE (0 to 360)
@@ -282,6 +285,7 @@ get_ipython().magic(u'qtconsole')
 ClickHistDo1 = ClickHistDo.ClickHistDo(lonValues,latValues,
                                        timeValues,startDatetime,
                                        bundleInFilename,
+                                       sessionLogFilename,
                                        xVarName=var1Name,
                                        yVarName=var2Name,
                                        lonOffset=lonOffset,
