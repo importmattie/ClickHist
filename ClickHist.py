@@ -1,6 +1,3 @@
-__author__ = 'niznik'
-__version__ = '0.28'
-
 # ClickHist takes care of the interactive, 2D visualization of the input
 # data and passes on data from click events to an instance of the
 # ClickHistDo class based on the user's specification at runtime.
@@ -8,18 +5,24 @@ __version__ = '0.28'
 # List of imports
 # ClickHistDo_Empty is used by default - can be overridden by user input.
 # clear_output is needed to reset messages sent to the user.
-# pylab is needed for colobars, plt is needed for plot visualizations, and
+# pylab is needed for colorbars, plt is needed for plot visualizations, and
 # rcParams is needed to disable plot toolbars.
 # np is used for math.
 # stats is used to determine percentiles.
 # sys used to detect user platform - needed for differences in os x and
 # linux sed calls.
-import ClickHistDo_Empty as ClickHistDo
 from IPython.display import clear_output
 from matplotlib import pylab, pyplot as plt, rcParams
 import numpy as np
+import os
 from scipy import stats
+from subprocess import call
 import sys
+
+__author__ = 'niznik'
+__clickHistName__ = 'ClickHist'
+__version__ = '1.0.0'
+
 
 class ClickHist:
     def __init__(self,xBinEdges,yBinEdges,xData,yData,**kwargs):
@@ -37,6 +40,13 @@ class ClickHist:
         # Start by determining the OS and disabling figure toolbars
         self.os = sys.platform
         rcParams['toolbar'] = 'None'
+
+        # Make sure the tmp directory exists for mostRecentCH.png
+        if not os.path.exists('./Output/'):
+            call('mkdir ./Output/Tmp/', shell=True)
+
+        if not os.path.exists('./Output/Tmp/'):
+            call('mkdir ./Output/Tmp/', shell=True)
 
         # Set default plot density (maxPlottedInBin) and size parameters
         # (fig[X,Y]PixelsReq, figDPIReq, scatmarksize) (Req is "Requested")
@@ -191,7 +201,7 @@ class ClickHist:
         self.pointColors,self.plotPos = self.generatePlotPositions()
 
         # Set the doObject that is used when a point is selected twice
-        self.doObject = ClickHistDo.ClickHistDo()
+        self.doObject = None
 
         # Set metadata, if any, passed by the user (default to blank)
         self.metadata = ''
@@ -308,17 +318,30 @@ class ClickHist:
                     print('Nearest data point is X='+
                             str(self.xFmtStr.format(closestDataX))+
                           ' Y='+str(self.yFmtStr.format(closestDataY)))
-                    print('(Click again to '+self.doObject.doObjectHint+')')
+                    if self.doObject is None:
+                        print('(Click again to do nothing - '+
+                              'no doObject currently set...)')
+                    else:
+                        print('(Click again to ' +
+                              self.doObject.doObjectHint+')')
                     self.lastClickLoc = locOfMinError
                 # Otherwise, do anything necessary to generate the input
                 # for ClickHistDo and then call it.
                 else:
-                    # This can be edited to do just about anything!
-                    # --- USER EDIT FOR CLICKHISTDO ---
                     clear_output()
                     plt.savefig('./Output/Tmp/mostRecentCH.png')
-                    self.doObject.do()
-                    # --- END USER EDIT FOR CLICKHISTDO ---
+                    if self.doObject is None:
+                        print('(Doing nothing - no doObject set...)')
+                    else:
+                        xPercentile = self.findPercentile(self.xData,
+                                                          closestDataX)
+                        yPercentile = self.findPercentile(self.yData,
+                                                          closestDataY)
+                        # This can be edited to do just about anything!
+                        # --- USER EDIT FOR CLICKHISTDO ---
+                        self.doObject.do()
+                        # --- END USER EDIT FOR CLICKHISTDO ---
+
                     # This should probably not be touched - it checks for
                     # whether or not to reset the closest point
                     self.lastClickLoc = locOfMinError
@@ -380,8 +403,10 @@ class ClickHist:
         """
         # Starting out with a 'dummy' call to pcolor just to set the colorbar
         # for later
-        p = self.axes_2D.pcolor(self.xBinEdgesFrac,self.yBinEdgesFrac,np.transpose(self.histLog),
-                                vmin=self.minPower,vmax=self.maxPower,cmap='Spectral_r')
+        p = self.axes_2D.pcolor(self.xBinEdgesFrac, self.yBinEdgesFrac,
+                                np.transpose(self.histLog),
+                                vmin=self.minPower, vmax=self.maxPower,
+                                cmap='Spectral_r')
         self.axes_2D.cla()
 
         # Scatter all of the points, previously filtered so that plot density
@@ -408,15 +433,20 @@ class ClickHist:
             self.axes_2D.axvline(x=self.xBinEdgesFrac[xx],color='#000000')
 
         # Set other aesthetics for the plot
-        self.axes_2D.set_title(self.xVarName+' vs '+self.yVarName,fontsize=8)
-        self.axes_2D.set_xlabel(self.xVarName+' (in '+self.xUnits+')',fontsize=6)
-        self.axes_2D.set_ylabel(self.yVarName+' (in '+self.yUnits+')',fontsize=6)
+        self.axes_2D.set_title(self.xVarName+' vs '+self.yVarName,
+                               fontsize=8)
+        self.axes_2D.set_xlabel(self.xVarName+' (in '+self.xUnits+')',
+                                fontsize=6)
+        self.axes_2D.set_ylabel(self.yVarName+' (in '+self.yUnits+')',
+                                fontsize=6)
         self.axes_2D.xaxis.set_label_coords(0.5,-0.43)
         self.axes_2D.yaxis.set_label_coords(-0.43,0.5)
 
         # Create the colorbar
         cbar = plt.colorbar(p,ticks=self.histTicks,
-                            fraction=(self.cbLen/(self.xPixFracLen+self.cbLen))-self.cbPad,
+                            fraction=((self.cbLen /
+                                      (self.xPixFracLen+self.cbLen)) -
+                                      self.cbPad),
                             pad=self.cbPad)
         cbar.ax.tick_params(labelsize=8)
 
@@ -462,7 +492,7 @@ class ClickHist:
 
         # Display text with the current version and any other messages
         self.figure.text(0.01,0.010,
-                         'ClickHist Version '+__version__+' (Open Beta)',
+                         __clickHistName__+' Version '+__version__,
                          fontsize=4)
 
         plt.show()
@@ -529,7 +559,8 @@ class ClickHist:
                     # maxPlottedInBin points for the plot.
                     if(numOfLocalMatches > self.maxPlottedInBin):
                         np.random.shuffle(localMatches)
-                    for mm in range(0,min(numOfLocalMatches,self.maxPlottedInBin)):
+                    for mm in range(0, min(numOfLocalMatches,
+                                           self.maxPlottedInBin)):
 
                         # Keep track of the position of matches in the
                         # original xData and yData variables so that
@@ -552,7 +583,8 @@ class ClickHist:
                         # Calculate the color of the scatterpoint based on its
                         # bin
                         locLogCount = self.histLog[v1bin,v2bin]
-                        cbPercent = (locLogCount-self.minPower)*(1.0/abs(self.minPower))
+                        cbPercent = ((locLogCount-self.minPower) *
+                                     (1.0/abs(self.minPower)))
                         pointColors.append(pylab.cm.Spectral_r(cbPercent))
 
         return np.array(xDataFrac),np.array(yDataFrac),\
@@ -597,10 +629,11 @@ class ClickHist:
         :return: the converted value, now with units
         """
         bin = np.searchsorted(binEdgesFrac,frac)-1
-        valPastBin = ((frac-binEdgesFrac[bin])/(binEdgesFrac[bin+1]-binEdgesFrac[bin]))*(binEdges[bin+1]-binEdges[bin])
+        valPastBin = (((frac-binEdgesFrac[bin]) /
+                      (binEdgesFrac[bin+1]-binEdgesFrac[bin])) *
+                      (binEdges[bin+1]-binEdges[bin]))
         return binEdges[bin]+valPastBin
 
-    # Not used by default in ClickHist but useful for implementations
     def findPercentile(self,dataArray,point):
         """
         Determines the percentile that a particular data value belongs to

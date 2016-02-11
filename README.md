@@ -1,18 +1,16 @@
 # ClickHist
 
 Clickable Histogram (ClickHist)
-ClickHist + Atmospheric Dataset =
-Clickable Histogram of Atmospheric Data (CHAD)
 
 Author: Matthew Niznik (matthewniznik on Github)
 
 E-mail: matt@matthewniznik.com | mniznik@rsmas.miami.edu
 
-Version 0.28
+Version 1.0.0
 
-Date: 2016-02-03
+Date: 2016-02-10
 
-(Note: ClickHist/CHAD is currently in Open Beta)
+(Note: ClickHist is currently in Open Beta)
 
 ClickHist is funded by NASA grant NNX14AR75G, PI: Brian Mapes, University of Miami
 
@@ -22,4 +20,4 @@ System Requirements:
 
 See the project wiki on GitHub! (https://github.com/matthewniznik/ClickHist/wiki)
 
-If you come across any bugs or need assistance in using ClickHist/CHAD, please notify the author at the E-mail listed above.
+If you come across any bugs or need assistance in using ClickHist, please notify the author at the E-mail listed above.

@@ -1,3 +1,8 @@
+version 1.0.0: 2/10/2016
+- made the design decision to move the other ClickHist implementations to separate projects to keep default ClickHist clean
+- no longer require a doObject if no second click functionality is desired
+- (Note: The GLORYS and CMIP5 implementations of ClickHist will soon be moved to their own projects as well.)
+
 version 0.28: 2/3/2016
 - implemented a 'SessionLog' for the GEOS-5 notebooks that keeps track of ClickHist snapshots and other images to track what the user did
 - removed .yml files and replaced with advice for individual user creation of environments in the wiki to avoid clutter
