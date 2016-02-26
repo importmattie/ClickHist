@@ -12,6 +12,102 @@
 # 
 # (Note: iPython Notebook needs a few tweaks to work most seemlessly with ClickHist and ClickHistDo instances - those will be pointed out below as they come up.)
 
+# # Let's get started
+# ## (0) Imports
+# ### Import the necessary modules needed for CHAD to work
+# 
+# *Currently supported graphics backends are Qt4Agg ('qt4') and TK ('tk')*
+
+# In[ ]:
+
+#%matplotlib tk
+get_ipython().magic(u'matplotlib qt4')
+import matplotlib
+#matplotlib.use('TkAgg')
+#matplotlib.use('Qt4Agg')
+
+from IPython.display import clear_output
+import numpy as np
+import sys
+
+import ClickHist
+
+# User-specified imports
+# You can put your custom imports here
+
+
+# ### Fixing the output so it isn't buffered
+# (*See [this link](http://stackoverflow.com/questions/29772158/make-ipython-notebook-print-in-real-time) for more info*)
+
+# In[ ]:
+
+oldsysstdout = sys.stdout
+class flushfile():
+    def __init__(self, f):
+        self.f = f
+    def __getattr__(self,name): 
+        return object.__getattribute__(self.f, name)
+    def write(self, x):
+        self.f.write(x)
+        self.f.flush()
+    def flush(self):
+        self.f.flush()
+sys.stdout = flushfile(sys.stdout)
+
+
+# ## (1) Setting the data
+# ### Below are some options for sample ClickHist data
+# **var1Values** and **var2Values** are used later to set up ClickHist - if you change the variable names here, be sure to change them in the cell that creates ClickHist<br><br>
+# If you would rather load data in and not manually specify variable values, this cell (or a new, empty cell above this one) is an appropriate location
+
+# In[ ]:
+
+numOfValues = 10000
+
+
+# ### Data randomly distributed between -1 and 1 on both axes
+
+# In[ ]:
+
+var1Values = (0.5-np.random.rand(numOfValues))*2
+var2Values = (0.5-np.random.rand(numOfValues))*2
+
+
+# ### Data normally distributed around 0 on both axes
+
+# In[ ]:
+
+var1Values = np.random.normal(loc=0., scale=0.2, size=numOfValues)
+var2Values = np.random.normal(loc=0., scale=0.2, size=numOfValues)
+
+
+# ### Data oriented in an 'X' shape
+
+# In[ ]:
+
+#randomValues = (0.5-np.random.rand(numOfValues))*2
+randomValues = np.random.normal(loc=0.0, scale=0.25, size=numOfValues)
+var1Values = randomValues+np.random.normal(loc=0.0, scale=0.1,
+                                           size=numOfValues)
+var2Values = np.zeros(numOfValues)
+for i in range(0, numOfValues):
+    if np.random.random() < 0.5:
+        var2Values[i] = randomValues[i]
+    else:
+        var2Values[i] = -1.*randomValues[i]
+    var2Values[i] = var2Values[i] + np.random.normal(loc=0.0, scale=0.1)
+
+
+# ### Now define the bins for each axis
+
+# In[ ]:
+
+var1Edges = np.arange(-1.1, 1.1+0.01, 0.2)
+var2Edges = np.arange(-1.1, 1.1+0.01, 0.2)
+
+
+# ### The following (less often edited) items are set to default values here. Change them if desired.
+
 # In[ ]:
 
 # User Changeable Parameters (and appropriate libraries)
@@ -54,109 +150,21 @@ var1ValueMult = 1.
 var2ValueMult = 1.
 
 
-# In[ ]:
+# # (2) Create the ClickHist Instance
+# (*Note that ClickHistDo can be created before ClickHist here as well, though for the basic test none is needed*)
 
-# Setting the GUI 
-# ClickHist is currently optimized for tk
-# For more options see section "%matplotlib" at
-# https://ipython.org/ipython-doc/3/interactive/magics.html
-
-# matplotlib for graphics, set tk too
-# %matplotlib osx is experimental
-get_ipython().magic(u'matplotlib tk')
-#%matplotlib osx
-import matplotlib
-
-# (Note: for debugging, replace '%' command with
-# matplotlib.use)
-#matplotlib.use('TkAgg')
-
-# Modules for fixing the buffer in cell 3 
-from IPython.display import clear_output
-import sys
-
-# numpy to create the sample input arrays
-import numpy as np
-
-# And obviously import ClickHist and ClickHistDo!
-import ClickHist
-
-# User-specified imports
-# You can put your custom imports here
-
+# ### Create the ClickHist Instance!
 
 # In[ ]:
 
-# Fixing the output so it isn't buffered
-# See: http://stackoverflow.com/questions/29772158/make-ipython-notebook-print-in-real-time
-
-oldsysstdout = sys.stdout
-class flushfile():
-    def __init__(self, f):
-        self.f = f
-    def __getattr__(self,name): 
-        return object.__getattribute__(self.f, name)
-    def write(self, x):
-        self.f.write(x)
-        self.f.flush()
-    def flush(self):
-        self.f.flush()
-sys.stdout = flushfile(sys.stdout)
-
-
-# In[ ]:
-
-# Create the sample data
-# If you would rather load data in and not manually specify
-# variable values, this cell (or a new, empty cell above this
-# one) is an appropriate location
-
-# Manual Bin Definition
-# Later call to create ClickHist uses the below variable names
-# You should probably leave the names alone
-var1Edges = np.arange(-1.1,1.1+0.01,0.2)
-var2Edges = np.arange(-1.1,1.1+0.01,0.2)
-
-# Manual Value Definition
-# Later call to create ClickHist uses the below variable names
-# You should probably leave the names alone
-numOfValues = 10000
-#var1Values = (0.5-np.random.rand(numOfValues))*2
-#var2Values = (0.5-np.random.rand(numOfValues))*2
-#var1Values = np.random.normal(loc=0.,scale=0.2,size=numOfValues)
-#var2Values = np.random.normal(loc=0.,scale=0.2,size=numOfValues)
-#randomValues = (0.5-np.random.rand(numOfValues))*2
-randomValues = np.random.normal(loc=0.0,scale=0.25,size=numOfValues)
-var1Values = randomValues+np.random.normal(loc=0.0,scale=0.1,
-                                           size=numOfValues)
-var2Values = np.zeros(numOfValues)
-for i in range(0,numOfValues):
-    if(np.random.random() < 0.5):
-        var2Values[i] = randomValues[i]
-    else:
-        var2Values[i] = -1.*randomValues[i]
-    var2Values[i] = var2Values[i] + np.random.normal(loc=0.0,scale=0.1)
-
-
-# In[ ]:
-
-# Create ClickHist using a proper call
-# If you only changed variable values in cells 1 and 4 above,
-# ClickHist is ready to go!
-
-# This call is necessary to create the output console for ClickHist
-# (Note: for debugging, comment out '%' command)
-get_ipython().magic(u'qtconsole')
-
-# Create a ClickHist instance
+#%qtconsole
 ClickHist1 = ClickHist.ClickHist(var1Edges,var2Edges,
                                  var1Values,var2Values,
-                                xVarName=var1Name,yVarName=var2Name,
-                                xUnits=var1Units,yUnits=var2Units,
-                                xFmtStr=var1FmtStr,
+                                 xVarName=var1Name, yVarName=var2Name,
+                                 xUnits=var1Units, yUnits=var2Units,
+                                 xFmtStr=var1FmtStr,
                                  yFmtStr=var2FmtStr,
-                                maxPlottedInBin=maxPlottedInBin_UD)
-# Show the ClickHist
+                                 maxPlottedInBin=maxPlottedInBin_UD)
 ClickHist1.showPlot()
 
 

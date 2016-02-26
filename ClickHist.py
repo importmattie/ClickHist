@@ -21,11 +21,11 @@ import sys
 
 __author__ = 'niznik'
 __clickHistName__ = 'ClickHist'
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 
 class ClickHist:
-    def __init__(self,xBinEdges,yBinEdges,xData,yData,**kwargs):
+    def __init__(self, xBinEdges, yBinEdges, xData, yData, **kwargs):
 
         """
         Creates an instance of ClickHist
@@ -43,7 +43,7 @@ class ClickHist:
 
         # Make sure the tmp directory exists for mostRecentCH.png
         if not os.path.exists('./Output/'):
-            call('mkdir ./Output/Tmp/', shell=True)
+            call('mkdir ./Output/', shell=True)
 
         if not os.path.exists('./Output/Tmp/'):
             call('mkdir ./Output/Tmp/', shell=True)
@@ -57,13 +57,13 @@ class ClickHist:
         self.figDPIReq = 150
         self.scatmarksize = int((self.figXPixelsReq+self.figYPixelsReq)/320)
 
-        if('maxPlottedInBin' in kwargs):
+        if 'maxPlottedInBin' in kwargs:
             self.maxPlottedInBin = kwargs['maxPlottedInBin']
-        if('figX' in kwargs):
+        if 'figX' in kwargs:
             self.figXPixelsReq = kwargs['figX']
-        if('figY' in kwargs):
+        if 'figY' in kwargs:
             self.figYPixelsReq = kwargs['figY']
-        if('figDPI' in kwargs):
+        if 'figDPI' in kwargs:
             self.figDPIReq = kwargs['figDPI']
 
         # Set the default formatting of the axes for output
@@ -76,17 +76,17 @@ class ClickHist:
         self.xFmtStr = "{:.1f}"
         self.yFmtStr = "{:.1f}"
 
-        if('xVarName' in kwargs):
+        if 'xVarName' in kwargs:
             self.xVarName = kwargs['xVarName']
-        if('yVarName' in kwargs):
+        if 'yVarName' in kwargs:
             self.yVarName = kwargs['yVarName']
-        if('xUnits' in kwargs):
+        if 'xUnits' in kwargs:
             self.xUnits = kwargs['xUnits']
-        if('yUnits' in kwargs):
+        if 'yUnits' in kwargs:
             self.yUnits = kwargs['yUnits']
-        if('xFmtStr' in kwargs):
+        if 'xFmtStr' in kwargs:
             self.xFmtStr = kwargs['xFmtStr']
-        if('yFmtStr' in kwargs):
+        if 'yFmtStr' in kwargs:
             self.yFmtStr = kwargs['yFmtStr']
 
         # Set parameters that help place the 2D histogram locations
@@ -107,14 +107,14 @@ class ClickHist:
         self.yPixFracLen_1DX = self.yPixFracEnd_1DX-self.yPixFracStart_1DX
         self.xPixFracStart_1DY = 0.05
         self.xPixFracEnd_1DY = self.xPixFracStart-0.1
-        self.xPixFracLen_1DY =self.xPixFracEnd_1DY-self.xPixFracStart_1DY
+        self.xPixFracLen_1DY = self.xPixFracEnd_1DY-self.xPixFracStart_1DY
 
         # Create the figure and retrieve the actual DPI/pixel sizes
         # Checking here for quirks of getting a slightly smaller or bigger
         # figure than the requested size
-        self.figure = plt.figure(figsize=((self.figXPixelsReq*1.0)/
+        self.figure = plt.figure(figsize=((self.figXPixelsReq*1.0) /
                                           self.figDPIReq,
-                                          (self.figYPixelsReq*1.0)/
+                                          (self.figYPixelsReq*1.0) /
                                           self.figDPIReq),
                                  dpi=self.figDPIReq)
         self.figDPI = self.figure.get_dpi()
@@ -144,14 +144,14 @@ class ClickHist:
         self.yBinEdges = yBinEdges
         self.xBinNum = len(self.xBinEdges)-1
         self.yBinNum = len(self.yBinEdges)-1
-        self.xBinEdgesFrac = np.arange(0.,self.xBinNum+1.,1.)/self.xBinNum
-        self.yBinEdgesFrac = np.arange(0.,self.yBinNum+1.,1.)/self.yBinNum
+        self.xBinEdgesFrac = np.arange(0., self.xBinNum+1., 1.)/self.xBinNum
+        self.yBinEdgesFrac = np.arange(0., self.yBinNum+1., 1.)/self.yBinNum
 
         # Calculate the histogram internally here
         # (In the future: allow to be passed as a kwarg instead?)
-        self.hist,A,B = np.histogram2d(self.xData,self.yData,
-                                       [self.xBinEdges,self.yBinEdges])
-        del A,B
+        self.hist, A, B = np.histogram2d(self.xData, self.yData,
+                                       [self.xBinEdges, self.yBinEdges])
+        del A, B
         self.totalCounts = np.sum(self.hist)
 
         # Set a maximum and minimum power
@@ -159,23 +159,25 @@ class ClickHist:
         # minus infinity after conversion to fractional, logarithmic histogram
         self.maxPower = 0
         self.minPower = int(np.log10(1./self.totalCounts))-1
-        self.histTicks = np.arange(self.minPower,self.maxPower+1,1)
-        self.histLog = np.log10((1.0*np.where(self.hist > 0,self.hist,0.1))/
+        self.histTicks = np.arange(self.minPower, self.maxPower+1,1)
+        self.histLog = np.log10((1.0*np.where(self.hist > 0, self.hist, 0.1)) /
                                 np.sum(self.hist))
         self.histLog = np.where(self.histLog < self.minPower,
-                                self.minPower,self.histLog)
+                                self.minPower, self.histLog)
 
         # Set similar parameters for the 1D histograms
-        self.histX = np.sum(self.hist,1)
-        self.histY = np.sum(self.hist,0)
-        self.histXLog = np.log10((1.0*np.where(self.histX > 0,self.histX,0.1))/
+        self.histX = np.sum(self.hist, 1)
+        self.histY = np.sum(self.hist, 0)
+        self.histXLog = np.log10((1.0*np.where(self.histX > 0,
+                                               self.histX, 0.1)) /
                                  np.sum(self.histX))
         self.histXLog = np.where(self.histXLog < self.minPower,
-                                 self.minPower,self.histXLog)
-        self.histYLog = np.log10((1.0*np.where(self.histY > 0,self.histY,0.1))/
+                                 self.minPower, self.histXLog)
+        self.histYLog = np.log10((1.0*np.where(self.histY > 0,
+                                               self.histY, 0.1)) /
                                  np.sum(self.histY))
         self.histYLog = np.where(self.histYLog < self.minPower,
-                                 self.minPower,self.histYLog)
+                                 self.minPower, self.histYLog)
 
         # Set up interactivity
         # Button press event tracks if there are clicks
@@ -183,7 +185,7 @@ class ClickHist:
         # click is considered
         # This also tracks the dot drawn at the click, the connecting line,
         # and the location of the previous click
-        self.cid = self.figure.canvas.mpl_connect('button_press_event',self)
+        self.cid = self.figure.canvas.mpl_connect('button_press_event', self)
         self.thinking = 0
         self.clicksInHist2D = 0
         self.lastClickLoc = -1
@@ -197,15 +199,15 @@ class ClickHist:
         # of the x and y data. This is necessary due to the design decision
         # to not plot every point (which would be time consuming and
         # pointlessly plot many points over each other).
-        self.xDataFrac,self.yDataFrac,\
-        self.pointColors,self.plotPos = self.generatePlotPositions()
+        self.xDataFrac, self.yDataFrac,\
+            self.pointColors, self.plotPos = self.generatePlotPositions()
 
         # Set the doObject that is used when a point is selected twice
         self.doObject = None
 
         # Set metadata, if any, passed by the user (default to blank)
         self.metadata = ''
-        if('metadata' in kwargs):
+        if 'metadata' in kwargs:
             self.metadata = kwargs['metadata']
 
         # Inform the user that the plot was successfully initialized
@@ -216,7 +218,7 @@ class ClickHist:
 
     #__call__() function
     #Describes what to do when the user clicks on the plot
-    def __call__(self,event):
+    def __call__(self, event):
         """
         Processes a user click, either returning a message about the closest
         point or, in the event that the same point was retrieved as the
@@ -226,7 +228,7 @@ class ClickHist:
         """
 
         # As long as we're not already processing a point when a click happens
-        if(self.thinking == 0):
+        if self.thinking == 0:
             # Indicate that we're processing a click, clear messages
             self.thinking = 1
             clear_output()
@@ -238,7 +240,7 @@ class ClickHist:
 
             # If the click was within the 2D histogram
             if((self.xPixFracStart < xClickFrac < self.xPixFracEnd) and
-                (self.yPixFracStart < yClickFrac < self.yPixFracEnd)):
+               (self.yPixFracStart < yClickFrac < self.yPixFracEnd)):
 
                 # Increase the counter for clicks
                 # Needed to make sure nothing is removed in the event that
@@ -249,24 +251,24 @@ class ClickHist:
                 # the 2D histogram and determine the bin of the click
                 # This will be used to convert the click location to x and
                 # y values to communicate to the user
-                xClickFracInPlot = (xClickFrac-self.xPixFracStart)/\
-                                   (self.xPixFracLen)
-                yClickFracInPlot = (yClickFrac-self.yPixFracStart)/\
-                                   (self.yPixFracLen)
+                xClickFracInPlot = ((xClickFrac-self.xPixFracStart) /
+                                    self.xPixFracLen)
+                yClickFracInPlot = ((yClickFrac-self.yPixFracStart) /
+                                    self.yPixFracLen)
                 xClickBin = np.searchsorted(self.xBinEdgesFrac,
                                             xClickFracInPlot)-1
                 yClickBin = np.searchsorted(self.yBinEdgesFrac,
                                             yClickFracInPlot)-1
-                xClickValPastBin = (xClickFracInPlot-
-                                    self.xBinEdgesFrac[xClickBin])*\
-                                   self.xBinNum*\
-                                       (self.xBinEdges[xClickBin+1]-
-                                        self.xBinEdges[xClickBin])
-                yClickValPastBin = (yClickFracInPlot-
-                                    self.yBinEdgesFrac[yClickBin])*\
-                                   self.yBinNum*\
-                                       (self.yBinEdges[yClickBin+1]-
-                                        self.yBinEdges[yClickBin])
+                xClickValPastBin = ((xClickFracInPlot -
+                                    self.xBinEdgesFrac[xClickBin]) *
+                                    self.xBinNum *
+                                    (self.xBinEdges[xClickBin+1] -
+                                     self.xBinEdges[xClickBin]))
+                yClickValPastBin = ((yClickFracInPlot -
+                                    self.yBinEdgesFrac[yClickBin]) *
+                                    self.yBinNum *
+                                    (self.yBinEdges[yClickBin+1] -
+                                     self.yBinEdges[yClickBin]))
                 xClickVal = self.xBinEdges[xClickBin]+xClickValPastBin
                 yClickVal = self.yBinEdges[yClickBin]+yClickValPastBin
 
@@ -278,7 +280,7 @@ class ClickHist:
 
                 # If this wasn't the first click, remove the point and line
                 # drawn last time to the closest point
-                if(self.clicksInHist2D > 1):
+                if self.clicksInHist2D > 1:
                     self.lastClickDot.remove()
                     lineToRemove = self.lastClickLine.pop()
                     lineToRemove.remove()
@@ -297,29 +299,29 @@ class ClickHist:
                                                         closestDataXFrac],
                                                         [yClickFracInPlot,
                                                          closestDataYFrac],
-                                                       '-',color='#ff4080')
+                                                       '-', color='#ff4080')
                 # Redraw the figure with the click point and line
                 plt.draw()
 
                 # Get the actual data values for the closest scatter point
                 closestDataX = self.convertFracToValue(
-                    self.xDataFrac[locOfMinError],self.xBinEdges,
+                    self.xDataFrac[locOfMinError], self.xBinEdges,
                     self.xBinEdgesFrac)
                 closestDataY = self.convertFracToValue(
-                    self.yDataFrac[locOfMinError],self.yBinEdges,
+                    self.yDataFrac[locOfMinError], self.yBinEdges,
                     self.yBinEdgesFrac)
 
                 # If this wasn't the same point as last time, just inform
                 # the user of the new closest point
-                if(self.lastClickLoc != locOfMinError):
-                    print('You clicked at X='+
-                          str(self.xFmtStr.format(xClickVal))+
+                if self.lastClickLoc != locOfMinError:
+                    print('You clicked at X=' +
+                          str(self.xFmtStr.format(xClickVal)) +
                           ' Y='+str(self.yFmtStr.format(yClickVal)))
-                    print('Nearest data point is X='+
-                            str(self.xFmtStr.format(closestDataX))+
+                    print('Nearest data point is X=' +
+                            str(self.xFmtStr.format(closestDataX)) +
                           ' Y='+str(self.yFmtStr.format(closestDataY)))
                     if self.doObject is None:
-                        print('(Click again to do nothing - '+
+                        print('(Click again to do nothing - ' +
                               'no doObject currently set...)')
                     else:
                         print('(Click again to ' +
@@ -347,24 +349,23 @@ class ClickHist:
                     self.lastClickLoc = locOfMinError
             # Now for the case that the user clicked in the x-axis 1D hist
             elif((self.xPixFracStart < xClickFrac < self.xPixFracEnd) and
-                     (self.yPixFracStart_1DX < yClickFrac <
-                          self.yPixFracEnd_1DX)):
+                 (self.yPixFracStart_1DX < yClickFrac < self.yPixFracEnd_1DX)):
                 # currentBin ranges from 1 through self.xBinNum,
                 # so edges are currentBin-1 and currentBin
-                currentBin = int(((xClickFrac-self.xPixFracStart)/
+                currentBin = int(((xClickFrac-self.xPixFracStart) /
                                   self.xPixFracLen)*self.xBinNum)
                 currentBinEdgeLow = self.xBinEdges[currentBin]
                 currentBinEdgeHigh = self.xBinEdges[currentBin+1]
                 currentBinPercent = "{:.4f}".format((10.**(self.histXLog[
-                                                               currentBin]))
-                                                    *100.)
+                                                               currentBin])) *
+                                                    100.)
                 currentBinMem = self.histX[currentBin]
                 clear_output()
                 print('X-Histogram Value:')
                 print('Bin '+str(currentBin+1)+':')
-                print(self.xFmtStr.format(currentBinEdgeLow)+' - '+
+                print(self.xFmtStr.format(currentBinEdgeLow)+' - ' +
                       self.xFmtStr.format(currentBinEdgeHigh)+' '+self.xUnits)
-                print(str(int(currentBinMem))+' counts ('+
+                print(str(int(currentBinMem))+' counts (' +
                       currentBinPercent+'% of all counts)')
             # Same as above, but for y-axis 1D hist
             # (NOTE: Worth changing in a future version to make this a simple
@@ -373,21 +374,21 @@ class ClickHist:
                  and (self.yPixFracStart < yClickFrac < self.yPixFracEnd)):
                 # currentBin ranges from 1 through self.xBinNum,
                 # so edges are currentBin-1 and currentBin
-                currentBin = int(((yClickFrac-self.yPixFracStart)/
+                currentBin = int(((yClickFrac-self.yPixFracStart) /
                                   self.yPixFracLen)*self.yBinNum)
                 currentBinEdgeLow = self.yBinEdges[currentBin]
                 currentBinEdgeHigh = self.yBinEdges[currentBin+1]
                 currentBinPercent = "{:.4f}".format(((10.**(self.histYLog[
-                                                                currentBin]))
-                                                     *100.))
+                                                                currentBin])) *
+                                                     100.))
                 currentBinMem = self.histY[currentBin]
                 clear_output()
                 print('Y-Histogram Value:')
                 print('Bin '+str(currentBin+1)+':')
-                print(self.yFmtStr.format(currentBinEdgeLow)+' - '
-                      +self.yFmtStr.format(currentBinEdgeHigh)+' '+self.yUnits)
-                print(str(int(currentBinMem))+' counts ('
-                      +currentBinPercent+'% of all counts)')
+                print(self.yFmtStr.format(currentBinEdgeLow)+' - ' +
+                      self.yFmtStr.format(currentBinEdgeHigh)+' '+self.yUnits)
+                print(str(int(currentBinMem))+' counts (' +
+                      currentBinPercent+'% of all counts)')
             # Otherwise, the user didn't click anywhere that has functionality
             # currently implemented. Just inform them of this.
             else:
@@ -411,26 +412,26 @@ class ClickHist:
 
         # Scatter all of the points, previously filtered so that plot density
         # is as desired
-        self.axes_2D.scatter(self.xDataFrac,self.yDataFrac,
-                             s=self.scatmarksize,c=self.pointColors,lw=0)
+        self.axes_2D.scatter(self.xDataFrac, self.yDataFrac,
+                             s=self.scatmarksize, c=self.pointColors, lw=0)
         # Deal with x-axis labeling
-        self.axes_2D.set_xlim(self.xBinEdgesFrac[0],self.xBinEdgesFrac[-1])
+        self.axes_2D.set_xlim(self.xBinEdgesFrac[0], self.xBinEdgesFrac[-1])
         self.axes_2D.set_xticks(self.xBinEdgesFrac)
         self.axes_2D.set_xticklabels(self.xBinEdges[0:self.xBinNum+1],
                                      rotation=270)
-        self.axes_2D.tick_params(axis='x',labelsize=6)
+        self.axes_2D.tick_params(axis='x', labelsize=6)
         # Deal with y-axis labeling
-        self.axes_2D.set_ylim(self.yBinEdgesFrac[0],self.yBinEdgesFrac[-1])
+        self.axes_2D.set_ylim(self.yBinEdgesFrac[0], self.yBinEdgesFrac[-1])
         self.axes_2D.set_yticks(self.yBinEdgesFrac)
         self.axes_2D.set_yticklabels(self.yBinEdges[0:self.yBinNum+1],
                                      rotation=360)
-        self.axes_2D.tick_params(axis='y',labelsize=6)
+        self.axes_2D.tick_params(axis='y', labelsize=6)
 
         # Draw the bin separation lines for the 2D histogram
-        for yy in range(0,self.yBinNum):
-            self.axes_2D.axhline(y=self.yBinEdgesFrac[yy],color='#000000')
-        for xx in range(0,self.xBinNum):
-            self.axes_2D.axvline(x=self.xBinEdgesFrac[xx],color='#000000')
+        for yy in range(0, self.yBinNum):
+            self.axes_2D.axhline(y=self.yBinEdgesFrac[yy], color='#000000')
+        for xx in range(0, self.xBinNum):
+            self.axes_2D.axvline(x=self.xBinEdgesFrac[xx], color='#000000')
 
         # Set other aesthetics for the plot
         self.axes_2D.set_title(self.xVarName+' vs '+self.yVarName,
@@ -439,11 +440,11 @@ class ClickHist:
                                 fontsize=6)
         self.axes_2D.set_ylabel(self.yVarName+' (in '+self.yUnits+')',
                                 fontsize=6)
-        self.axes_2D.xaxis.set_label_coords(0.5,-0.43)
-        self.axes_2D.yaxis.set_label_coords(-0.43,0.5)
+        self.axes_2D.xaxis.set_label_coords(0.5, -0.43)
+        self.axes_2D.yaxis.set_label_coords(-0.43, 0.5)
 
         # Create the colorbar
-        cbar = plt.colorbar(p,ticks=self.histTicks,
+        cbar = plt.colorbar(p, ticks=self.histTicks,
                             fraction=((self.cbLen /
                                       (self.xPixFracLen+self.cbLen)) -
                                       self.cbPad),
@@ -452,35 +453,35 @@ class ClickHist:
 
         # Draw the x-axis 1D histogram, first to set the axes, and then again
         # to draw each bar with the proper color
-        self.axes_1DX.bar(self.xBinEdgesFrac[:-1],self.histXLog-self.minPower,
+        self.axes_1DX.bar(self.xBinEdgesFrac[:-1], self.histXLog-self.minPower,
                           width=1./self.xBinNum)
         for ii in range(0,self.xBinNum):
             cbPercent = (self.histXLog[ii]-self.minPower)*\
                         (1.0/abs(self.minPower))
             barColorsX = pylab.cm.Spectral_r(cbPercent)
-            self.axes_1DX.bar(self.xBinEdgesFrac[ii],self.histXLog[ii]-
-                              self.minPower,width=1./self.xBinNum,
+            self.axes_1DX.bar(self.xBinEdgesFrac[ii], self.histXLog[ii] -
+                              self.minPower, width=1./self.xBinNum,
                               color=barColorsX)
-            if(ii != 0):
+            if ii != 0:
                 self.axes_1DX.axvline(x=self.xBinEdgesFrac[ii],
-                                      ls='--',lw=1,color='#444444')
+                                      ls='--', lw=1, color='#444444')
         self.axes_1DX.xaxis.set_visible(False)
         self.axes_1DX.yaxis.set_visible(False)
 
         # Draw the y-axis 1D histogram, first to set the axes, and then again
         # to draw each bar with the proper color
-        self.axes_1DY.barh(self.yBinEdgesFrac[:-1],self.histYLog-
-                           self.minPower,height=1./self.yBinNum)
+        self.axes_1DY.barh(self.yBinEdgesFrac[:-1], self.histYLog -
+                           self.minPower, height=1./self.yBinNum)
         for ii in range(0,self.yBinNum):
-            cbPercent = (self.histYLog[ii]-self.minPower)*\
-                        (1.0/abs(self.minPower))
+            cbPercent = ((self.histYLog[ii]-self.minPower) *
+                         (1.0/abs(self.minPower)))
             barColorsY = pylab.cm.Spectral_r(cbPercent)
-            self.axes_1DY.barh(self.yBinEdgesFrac[ii],self.histYLog[ii]-
-                               self.minPower,height=1./self.yBinNum,
+            self.axes_1DY.barh(self.yBinEdgesFrac[ii], self.histYLog[ii] -
+                               self.minPower, height=1./self.yBinNum,
                                color=barColorsY)
-            if(ii != 0):
+            if ii != 0:
                 self.axes_1DY.axhline(y=self.yBinEdgesFrac[ii],
-                                      ls='--',lw=1,color='#444444')
+                                      ls='--', lw=1, color='#444444')
         self.axes_1DY.xaxis.set_visible(False)
         self.axes_1DY.yaxis.set_visible(False)
 
@@ -488,10 +489,20 @@ class ClickHist:
         # There is currently no implemented method to change all of the
         # fractional paramters if the window is resized, so clicking would
         # break
-        plt.get_current_fig_manager().window.resizable(False,False)
+        print('(Using '+plt.get_backend()+')')
+        if plt.get_backend() == 'Qt4Agg':
+            figMan = plt.get_current_fig_manager()
+            figMan.window.setFixedSize(self.figXPixelsReq, self.figYPixelsReq)
+            figMan.window.statusBar().hide()
+        elif plt.get_backend() == 'TkAgg':
+            figMan = plt.get_current_fig_manager()
+            figMan.window.resizable(False, False)
+        else:
+            print('Warning - undetected figure manager. Resizing window ' +
+                  'will result in unexpected behavior')
 
         # Display text with the current version and any other messages
-        self.figure.text(0.01,0.010,
+        self.figure.text(0.01, 0.010,
                          __clickHistName__+' Version '+__version__,
                          fontsize=4)
 
@@ -535,21 +546,21 @@ class ClickHist:
         yDataFrac = []
         pointColors = []
         plotPos = []
-        for v1bin in range(0,self.xBinNum):
-            for v2bin in range(0,self.yBinNum):
+        for v1bin in range(0, self.xBinNum):
+            for v2bin in range(0, self.yBinNum):
 
                 # Calculate the middle point of each bin, determine its span
                 # in either direction (i.e. 1/2 of its width), and then find
                 # all points that belong to that particular bin
                 xBinMid = (self.xBinEdges[v1bin]+self.xBinEdges[v1bin+1])/2.
                 yBinMid = (self.yBinEdges[v2bin]+self.yBinEdges[v2bin+1])/2.
-                xAcceptError = (self.xBinEdges[v1bin+1]-
+                xAcceptError = (self.xBinEdges[v1bin+1] -
                                 self.xBinEdges[v1bin])/2.
-                yAcceptError = (self.yBinEdges[v2bin+1]-
+                yAcceptError = (self.yBinEdges[v2bin+1] -
                                 self.yBinEdges[v2bin])/2.
-                localMatches = np.intersect1d(np.where(np.abs(self.xData-
-                       xBinMid)<xAcceptError),np.where(np.abs(self.yData-
-                       yBinMid)<yAcceptError))
+                localMatches = np.intersect1d(np.where(np.abs(self.xData -
+                       xBinMid) < xAcceptError), np.where(np.abs(self.yData -
+                       yBinMid) < yAcceptError))
                 numOfLocalMatches = len(localMatches)
 
                 # If there is at least one member to a bin...
@@ -557,7 +568,7 @@ class ClickHist:
                     # If there are more points than the density allows,
                     # shuffle them before picking out the first
                     # maxPlottedInBin points for the plot.
-                    if(numOfLocalMatches > self.maxPlottedInBin):
+                    if numOfLocalMatches > self.maxPlottedInBin:
                         np.random.shuffle(localMatches)
                     for mm in range(0, min(numOfLocalMatches,
                                            self.maxPlottedInBin)):
@@ -571,26 +582,26 @@ class ClickHist:
                         # position, and then store it
                         xDataTemp = self.xData[localMatches[mm]]
                         yDataTemp = self.yData[localMatches[mm]]
-                        xDataFracTemp = ((1.0*v1bin/self.xBinNum)+
-                            (self.calcFracPastBinMin(xDataTemp,self.xBinEdges,
+                        xDataFracTemp = ((1.0*v1bin/self.xBinNum) +
+                            (self.calcFracPastBinMin(xDataTemp, self.xBinEdges,
                                                      v1bin)/self.xBinNum))
-                        yDataFracTemp = ((1.0*v2bin/self.yBinNum)+
-                            (self.calcFracPastBinMin(yDataTemp,self.yBinEdges,
+                        yDataFracTemp = ((1.0*v2bin/self.yBinNum) +
+                            (self.calcFracPastBinMin(yDataTemp, self.yBinEdges,
                                                      v2bin)/self.yBinNum))
                         xDataFrac.append(xDataFracTemp)
                         yDataFrac.append(yDataFracTemp)
 
                         # Calculate the color of the scatterpoint based on its
                         # bin
-                        locLogCount = self.histLog[v1bin,v2bin]
+                        locLogCount = self.histLog[v1bin, v2bin]
                         cbPercent = ((locLogCount-self.minPower) *
                                      (1.0/abs(self.minPower)))
                         pointColors.append(pylab.cm.Spectral_r(cbPercent))
 
-        return np.array(xDataFrac),np.array(yDataFrac),\
-               np.array(pointColors),np.array(plotPos)
+        return np.array(xDataFrac), np.array(yDataFrac), \
+            np.array(pointColors), np.array(plotPos)
 
-    def findNearestPointToClick(self,xClickVal,yClickVal):
+    def findNearestPointToClick(self, xClickVal, yClickVal):
         """
         Returns the closest point to the click in terms of physical plot
         location (pixels), not necessarily by absolute value
@@ -600,13 +611,13 @@ class ClickHist:
         2D histogram
         :return: The 1D array index of the closest point
         """
-        error = ((self.xDataFrac-xClickVal)**2+
+        error = ((self.xDataFrac-xClickVal)**2 +
                  (self.yDataFrac-yClickVal)**2)**0.5
         minError = np.amin(error)
         locOfMinError = np.where(error == minError)[0][0]
         return locOfMinError
 
-    def calcFracPastBinMin(self,value,binEdges,bin):
+    def calcFracPastBinMin(self, value, binEdges, bin):
         """
         Calculates how far past the minimum of a bin a value is in the range 0
         to 1, with 1 being at the maximum of a bin (e.g. 15 with bin min 10 and
@@ -617,9 +628,9 @@ class ClickHist:
         :return: a value between 0 and 1 indicating how far near the bin
         minimum (0) or maximum (1) the value lies
         """
-        return ((value-binEdges[bin])/(binEdges[bin+1]-binEdges[bin]))
+        return (value-binEdges[bin])/(binEdges[bin+1]-binEdges[bin])
 
-    def convertFracToValue(self,frac,binEdges,binEdgesFrac):
+    def convertFracToValue(self, frac, binEdges, binEdgesFrac):
         """
         Converts a fractional location in a histogram to an actual value with
         units (e.g. from 0.5 to 50 mm/day)
@@ -628,13 +639,13 @@ class ClickHist:
         :param binEdgesFrac: the fractional bin edge values
         :return: the converted value, now with units
         """
-        bin = np.searchsorted(binEdgesFrac,frac)-1
+        bin = np.searchsorted(binEdgesFrac, frac)-1
         valPastBin = (((frac-binEdgesFrac[bin]) /
                       (binEdgesFrac[bin+1]-binEdgesFrac[bin])) *
                       (binEdges[bin+1]-binEdges[bin]))
         return binEdges[bin]+valPastBin
 
-    def findPercentile(self,dataArray,point):
+    def findPercentile(self, dataArray, point):
         """
         Determines the percentile that a particular data value belongs to
         among the data
@@ -642,9 +653,9 @@ class ClickHist:
         :param point: The value of a particular point
         :return: The percentile (0.0-99.9) of point relative to dataArray
         """
-        return stats.percentileofscore(dataArray,point)
+        return stats.percentileofscore(dataArray, point)
 
-    def setDo(self,doObject):
+    def setDo(self, doObject):
         """
         Sets the ClickHistDo object
         :param doObject: A ClickHistDo object

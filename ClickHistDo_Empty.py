@@ -8,6 +8,7 @@ __author__ = 'niznik'
 # The do method is where all of the scripting should occur - see
 # the IDV implementation for one such example
 
+
 class ClickHistDo:
     def __init__(self):
         """
