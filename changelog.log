@@ -1,3 +1,6 @@
+version 1.0.2: 3/23/2016
+- Added quantiles as an optional input - they show up in the X and Y axes
+
 version 1.0.1: 2/26/2016
 - Added changes to optimize for Qt4
 - Updated much of the code for increased compliance with PEP 8

@@ -149,6 +149,12 @@ metadata_UD = 'Sample Metadata'
 var1ValueMult = 1.
 var2ValueMult = 1.
 
+# Quantiles to plot
+# If you are interested in any threshold in both X and Y,
+# set it here.
+# (e.g. 90th percentile and 95th percentile, input [90, 95])
+quantiles = [0.01,0.1,1,5,95,99,99.9,99.99]
+
 
 # # (2) Create the ClickHist Instance
 # (*Note that ClickHistDo can be created before ClickHist here as well, though for the basic test none is needed*)
@@ -164,7 +170,8 @@ ClickHist1 = ClickHist.ClickHist(var1Edges,var2Edges,
                                  xUnits=var1Units, yUnits=var2Units,
                                  xFmtStr=var1FmtStr,
                                  yFmtStr=var2FmtStr,
-                                 maxPlottedInBin=maxPlottedInBin_UD)
+                                 maxPlottedInBin=maxPlottedInBin_UD,
+                                 quantiles=quantiles)
 ClickHist1.showPlot()
 
 

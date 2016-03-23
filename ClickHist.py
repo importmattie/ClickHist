@@ -21,7 +21,7 @@ import sys
 
 __author__ = 'niznik'
 __clickHistName__ = 'ClickHist'
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
 
 class ClickHist:
@@ -75,6 +75,7 @@ class ClickHist:
         self.yUnits = 'units'
         self.xFmtStr = "{:.1f}"
         self.yFmtStr = "{:.1f}"
+        self.quantiles = [1, 5, 10, 90, 95, 99]
 
         if 'xVarName' in kwargs:
             self.xVarName = kwargs['xVarName']
@@ -88,6 +89,8 @@ class ClickHist:
             self.xFmtStr = kwargs['xFmtStr']
         if 'yFmtStr' in kwargs:
             self.yFmtStr = kwargs['yFmtStr']
+        if 'quantiles' in kwargs:
+            self.quantiles = kwargs['quantiles']
 
         # Set parameters that help place the 2D histogram locations
         # These should not change unless you want to experiment with placements
@@ -432,6 +435,12 @@ class ClickHist:
             self.axes_2D.axhline(y=self.yBinEdgesFrac[yy], color='#000000')
         for xx in range(0, self.xBinNum):
             self.axes_2D.axvline(x=self.xBinEdgesFrac[xx], color='#000000')
+
+        for quantile in self.quantiles:
+            self.axes_2D.axvline(x=np.percentile(self.xDataFrac, quantile),
+                                 ls='--', lw=0.5, color='#888888')
+            self.axes_2D.axhline(y=np.percentile(self.yDataFrac, quantile),
+                                 ls='--', lw=0.5, color='#888888')
 
         # Set other aesthetics for the plot
         self.axes_2D.set_title(self.xVarName+' vs '+self.yVarName,
