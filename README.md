@@ -4,7 +4,7 @@ Clickable Histogram (ClickHist)
 
 Author: Mattie Niznik (importmattie on Github)
 
-E-mail: mniznik@colostate.edu
+E-mail: matthew.niznik@colostate.edu
 
 Version 1.0.2
 
