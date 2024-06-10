@@ -3,12 +3,11 @@
 
 # ## Clickable Histogram (ClickHist)
 # 
-# Author: [Matthew Niznik](http://matthewniznik.com) ([matt@matthewniznik.com](mailto:matt@matthewniznik.com))<br>
+# Author: [Mattie Niznik](http://importmattie.github.io) ([mattie.niznik@princeton.edu](mailto:mattie.niznik@princeton.edu))<br>
 # Post-Doctoral Associate, RSMAS, University of Miami
 # 
 # For more information, see:<br>
-# https://github.com/matthewniznik/ClickHist/wiki<br>
-# http://matthewniznik.com/research-projects/clickhist<br>
+# https://github.com/importmattie/ClickHist/wiki<br>
 # 
 # (Note: iPython Notebook needs a few tweaks to work most seemlessly with ClickHist and ClickHistDo instances - those will be pointed out below as they come up.)
 
